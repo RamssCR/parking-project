@@ -1,0 +1,2 @@
+Carpeta de vistas diseñada para los roles de cada usuario (en este caso: admin, empleado).
+El PHP/HTML de vista se debe almacenar en una de las 2 carpetas dependiendo de qué vistas tenga acceso cada usuario.
