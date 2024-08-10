@@ -1,9 +1,10 @@
 <?php
 // Realizar conexión con la base de datos
 $host = 'localhost';
-$root = '';
+$user = 'root';
 $pwd = '';
-$database = '';
+$database = 'dbpenta';
 
 $conn = mysqli_connect($host, $root, $pwd, $database);
+
 ?>
