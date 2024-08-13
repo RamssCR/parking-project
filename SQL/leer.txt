@@ -1,1 +1,0 @@
-Una vez finalizada la creación del esquema SQL en Workbench o PHPMyAdmin, exportar en formato .sql y almacenar en esta carpeta.

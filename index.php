@@ -6,6 +6,6 @@
     <title>Parqueadero</title>
 </head>
 <body>
-    <!-- Este será el archivo que leerá por defecto el localhost o el hosting -->
+    
 </body>
 </html>
