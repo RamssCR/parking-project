@@ -1,9 +1,9 @@
 <?php
 // Realizar conexión con la base de datos
 $host = 'localhost';
-$root = '';
+$username = 'root';
 $pwd = '';
 $database = '';
 
-$conn = mysqli_connect($host, $root, $pwd, $database);
+$conn = mysqli_connect($host, $username, $pwd, $database);
 ?>
