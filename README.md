@@ -2,7 +2,7 @@
 
 > Encargados de cada área:
 
-- Frontend: Tomás Osorio
+- Frontend: Tomás Osorio, Jesús Mazo
 - Backend: Ramsés Pérez, Juan Diego Franco
 - Base de Datos: Jesús Mazo
 
