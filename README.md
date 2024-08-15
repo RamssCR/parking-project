@@ -4,7 +4,7 @@
 
 - Frontend: Tomás Osorio, Jesús Mazo
 - Backend: Ramsés Pérez, Juan Diego Franco
-- Base de Datos: Jesús Mazo
+- Base de Datos: Jesús Mazo ✅
 
 # FRONTEND
 
