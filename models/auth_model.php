@@ -14,7 +14,7 @@ class AuthModel {
 
     public function login() : array | bool {
         // validating user's existance in the database
-        $query = mysqli_query($this->connection, "SELECT * FROM usuarios WHERE email = '$this->email' AND tipo_usuario = '$this->role'");
+        $query = mysqli_execute_query($this->connection, "SELECT * FROM usuarios WHERE email = ? AND tipo_usuario = ?", [$this->email, $this->role]);
         if (mysqli_num_rows($query) != 1) return false;
 
         $matchedUser = mysqli_fetch_assoc($query);
