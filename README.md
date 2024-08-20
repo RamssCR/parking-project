@@ -13,6 +13,7 @@
 - styles
 - view
 - index.php
+- images
 
 # BACKEND
 
