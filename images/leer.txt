@@ -1,1 +1,0 @@
-- Carpeta de imágenes diseñada para usar imágenes por defecto de la aplicación web.

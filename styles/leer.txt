@@ -1,2 +1,0 @@
-Carpeta de posibles estilos CSS si se precisa acompañar con TailwindCSS o realizarlo con CSS puro.
-A TENER EN CUENTA: Si sólo se va a usar CSS puro, utilizar un pre-procesador de CSS como 'Sass' o 'Bulma'.
