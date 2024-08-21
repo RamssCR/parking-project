@@ -5,15 +5,13 @@ require_once('models/parking_model.php');
 
     $employee = [
         'name' => $name,
+        'document_ID' => $document_ID,
         'email' => $email,
-        'phone' => $phone
-    ]
-
-    $trigger = [
-        'email' => $email,
+        'phone' => $phone,
         'password' => $document_ID,
         'role' => $role
     ]
+
 */
 
 class ParkingController {
@@ -56,6 +54,15 @@ class ParkingController {
         if (!$vehicle) return 'Este vehículo no está registrado con este cliente';
 
         return $vehicle;
+    }
+
+    // Create an Admin/user - Employee/user
+    public function create_employee($employee) {
+        $create_newEmployee = $this->model->create_employee($employee);
+
+        if (!$create_newEmployee) return 'Ya existe un usuario con el mismo número de documento';
+        if ($create_newEmployee == 500) return 'Hubo un error al agregar un nuevo empleado';
+        if ($create_newEmployee) return 'Empleado y Usuario creado exitosamente';
     }
 }
 

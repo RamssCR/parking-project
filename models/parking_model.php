@@ -40,6 +40,37 @@ class ParkingModel {
 
         return mysqli_fetch_assoc($vehicle);
     }
+
+    // Create an Admin/user - Employee/user
+    public function create_employee($employee) : bool | int {
+        $employeeExists = mysqli_execute_query($this->connection, 'SELECT * FROM admin a INNER JOIN empleados e ON a.documento = e.documento WHERE a.documento = ?', 
+            [$employee['document']]
+        );
+        
+        if (mysqli_num_rows($employeeExists) >= 1) return false;
+
+        if ($employee['role'] == 'Admin') {
+            $createEmployee = mysqli_execute_query($this->connection, 'INSERT INTO admin (documento, nombre, email, telefono) VALUES (?, ?, ?, ?)', 
+                [$employee['document'], $employee['name'], $employee['email'], $employee['phone']]
+            );
+        } else if ($employee['role'] == 'Empleado') {
+            $createEmployee = mysqli_execute_query($this->connection, 'INSERT INTO empleados (documento, nombre, email, telefono) VALUES (?, ?, ?, ?)', 
+                [$employee['document'], $employee['name'], $employee['email'], $employee['phone']]
+            );
+        }
+
+        if ($createEmployee) {
+            $password = password_hash('parking_' + $employee['document'], PASSWORD_BCRYPT);
+            $trigger_createUser = mysqli_execute_query($this->connection, 'INSERT INTO usuarios (email, password, tipo_usuario) VALUES (?, ?, ?)',
+                [$employee['email'], $password, $employee['role']]
+            );
+
+            if (!$trigger_createUser) return 500;
+            return true;
+        } else {
+            return 500;
+        }
+    }
 }
 
 ?>
