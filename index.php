@@ -1,3 +1,15 @@
+<?php 
+if (isset($_POST['login'])){
+    require_once("controllers/auth_controller.php");
+
+    $auth = new AuthController($_POST['email'], $_POST['password'], $_POST['role']);
+    $login = $auth->login();
+
+    echo $login['email'];
+}
+    
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,11 +23,11 @@
             <form method="post">
                 <div class="container-group">
                     <label for="email">Correo</label>
-                    <input type="text" id="email" placeholder="Ingresa tu correo" />
+                    <input type="text" id="email" placeholder="Ingresa tu correo" name="email" />
                 </div>
                 <div class="container-group">
                     <label for="password">Contraseña</label>
-                    <input type="password" id="password" placeholder="Ingresa tu contraseña" />
+                    <input type="password" id="password" placeholder="Ingresa tu contraseña"  name="password"/>
                 </div>
                 <div class="container-group">
                     <label for="role">Rol</label>
@@ -26,7 +38,7 @@
                     </select>
                 </div>
                 <div class="btns-group">
-                    <button type="submit">Ingresar</button>
+                    <button type="submit" name="login">Ingresar</button>
                     <a href="#">¿Olvidaste tu contraseña?</a>
                 </div>
             </form>

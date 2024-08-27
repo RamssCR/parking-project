@@ -6,4 +6,5 @@ $pwd = '';
 $database = 'dbpenta';
 
 $conn = mysqli_connect($host, $username, $pwd, $database);
+
 ?>
