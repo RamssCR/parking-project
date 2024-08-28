@@ -85,8 +85,8 @@ class ParkingController {
     }
 
     // DELETE employee
-    public function delete_employee($document) {
-        $remove_employee = $this->model->delete_employee($document);
+    public function delete_employee($document, $email) {
+        $remove_employee = $this->model->delete_employee($document, $email);
 
         if ($remove_employee == 500) return 'Hubo un error al eliminar el empleado selecionado';
         if ($remove_employee) return 'Empleado y usuario eliminados exitosamente';
