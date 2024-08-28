@@ -7,6 +7,10 @@ class ParkingModel {
         $this->connection = mysqli_connect('localhost', 'root', '', 'dbpenta');
     }
 
+    // GET requests
+
+    // Customers
+
     // Get all customers
     public function getAll_customers() {
         return mysqli_execute_query($this->connection, 'SELECT * FROM clientes');
@@ -19,6 +23,8 @@ class ParkingModel {
 
         return mysqli_fetch_assoc($get_customer);
     }
+
+    // Vehicles
 
     // Get all vehicles info
     public function getAll_vehicles() {
@@ -41,10 +47,27 @@ class ParkingModel {
         return mysqli_fetch_assoc($vehicle);
     }
 
+    // Employees
+
+    // Get all employees
+    public function getAll_employees() {
+        return mysqli_execute_query($this->connection, 'SELECT * FROM admin UNION SELECT * FROM empleados');
+    }
+
+    // Get an employee
+    public function get_employee($id) : array | bool {
+        $employee = mysqli_execute_query($this->connection, 'SELECT * FROM admin WHERE documento = ? UNION SELECT * FROM empleados WHERE documento = ?',
+            [$id, $id]
+        );
+
+        if (!$employee) return false;
+        return mysqli_fetch_assoc($employee);
+    }
+
     // Create an Admin/user - Employee/user
     public function create_employee($employee) : bool | int {
-        $employeeExists = mysqli_execute_query($this->connection, 'SELECT * FROM admin a INNER JOIN empleados e ON a.documento = e.documento WHERE a.documento = ?', 
-            [$employee['document']]
+        $employeeExists = mysqli_execute_query($this->connection, 'SELECT * FROM admin WHERE documento = ? OR email = ? UNION SELECT * FROM empleados WHERE documento = ? OR email = ?', 
+            [$employee['document'], $employee['email'], $employee['document'], $employee['email']]
         );
         
         if (mysqli_num_rows($employeeExists) >= 1) return false;
@@ -60,12 +83,54 @@ class ParkingModel {
         }
 
         if ($createEmployee) {
-            $password = password_hash('parking_' + $employee['document'], PASSWORD_BCRYPT);
+            $passwordToHash = 'parking_' . $employee['document'];
+            $password = password_hash($passwordToHash, PASSWORD_BCRYPT);
             $trigger_createUser = mysqli_execute_query($this->connection, 'INSERT INTO usuarios (email, password, tipo_usuario) VALUES (?, ?, ?)',
                 [$employee['email'], $password, $employee['role']]
             );
 
             if (!$trigger_createUser) return 500;
+            return true;
+        } else {
+            return 500;
+        }
+    }
+
+    // Edit an Admin/Employee
+    public function patch_employee($document, $employee) {
+        $foundEmployee = mysqli_execute_query($this->connection, 'SELECT * FROM admin WHERE documento = ? UNION SELECT * FROM empleados WHERE documento = ?', 
+            [$document, $document]
+        );
+        if (mysqli_num_rows($foundEmployee) != 1) return 404;
+        
+        if ($employee['role'] == 'Admin') {
+            $updatedEmployee = mysqli_execute_query($this->connection, 'UPDATE admin SET documento = ?, nombre = ?, telefono = ? WHERE documento = ?', 
+                [$employee['document'], $employee['name'], $employee['email'], $employee['phone'], $document]
+            );
+            if (!$updatedEmployee) return 500;
+            return true;
+        } else if ($employee['role'] == 'Empleado') {
+            $updatedEmployee = mysqli_execute_query($this->connection, 'UPDATE empleados SET documento = ?, nombre = ?, telefono = ? WHERE documento = ?', 
+                [$employee['document'], $employee['name'], $employee['email'], $employee['phone'], $document]
+            );
+            if (!$updatedEmployee) return 500;
+            return true;
+        }
+    }
+
+    // Delete an employee
+    public function delete_employee($document, $email) : bool | int {
+        $foundEmployee = mysqli_execute_query($this->connection, 'SELECT * FROM admin WHERE documento = ?', [$document]);
+
+        if ($foundEmployee) {
+            $remove_employee = mysqli_execute_query($this->connection, 'DELETE FROM admin WHERE documento = ?', [$document]);
+        } else {
+            $remove_employee = mysqli_execute_query($this->connection, 'DELETE FROM empleados WHERE documento = ?', [$document]);
+        }
+
+        if ($remove_employee) {
+            $trigger_removeUser = mysqli_execute_query($this->connection, 'DELETE FROM usuarios WHERE email = ?', [$email]);
+            if (!$trigger_removeUser) return 500;
             return true;
         } else {
             return 500;

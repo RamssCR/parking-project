@@ -14,6 +14,8 @@ class AuthController {
     }
 
     public function login() {
+        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) return 'El correo ingresado es invalido';
+
         $validate_password = validatePassword($this->password);
         if ($validate_password != true) return $validate_password;
 

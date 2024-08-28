@@ -1,1 +1,0 @@
-Carpeta diseñada para el PHP vista de los admins.
