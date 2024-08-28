@@ -25,20 +25,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <title>Document</title>
-    <link rel="stylesheet" href="../,,/empleado.css">
+    <link rel="stylesheet" href="../../styles/empleado.css">
 </head>
 <body>
-    <form method="post">
-        <input type="text" name="document_ID" placeholder="document">
-        <input type="text" name="name" placeholder="name">
-        <input type="text" name="email" placeholder="email">
-        <input type="text" name="phone" placeholder="phone">
-        <select name="role">
-            <option value="">Seleccione rol</option>
-            <option value="Admin">Administrador</option>
-            <option value="Empleado">Empleado</option>
-        </select>
-        <input type="submit" name="send" value="Enviar">     
+<div class="form-container">
+        <form action="#" method="post">
+            <div class="form-group">
+                <label for="document">Documento:</label>
+                <input type="text" id="document" name="document" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Correo:</label>
+                <input type="email" id="email" name="email" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Teléfono:</label>
+                <input type="tel" id="phone" name="phone" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Rol:</label>
+                <select id="role" name="role" class="form-input" required>
+                    <option value="empleado">Empleado</option>
+                    <option value="usuario">Usuario</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Enviar" class="form-submit">
+            </div>
+        </form>
+    </div>   
     </form>
 </body>
 </html>
