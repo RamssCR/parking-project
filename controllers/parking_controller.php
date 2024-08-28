@@ -1,5 +1,5 @@
 <?php
-require_once('models/parking_model.php');
+require_once('../../models/parking_model.php');
 
 class ParkingController {
     // Properties
@@ -70,18 +70,26 @@ class ParkingController {
     public function create_employee($employee) {
         $create_newEmployee = $this->model->create_employee($employee);
 
-        if (!$create_newEmployee) return 'Ya existe un usuario con el mismo número de documento';
+        if (!$create_newEmployee) return 'Ya existe un usuario con el mismo número de documento o correo electrónico';
         if ($create_newEmployee == 500) return 'Hubo un error al agregar un nuevo empleado';
         if ($create_newEmployee) return 'Empleado y Usuario creado exitosamente';
     }
 
     // PATCH employee
-    public function patch_employee($id, $employee) {
-        $patching_employee = $this->model->patch_employee($id, $employee);
+    public function patch_employee($document, $employee) {
+        $patching_employee = $this->model->patch_employee($document, $employee);
 
         if ($patching_employee == 404) return 'No existe tal usuario en la aplicación';
         if ($patching_employee == 500) return 'Hubo un error al actualizar los datos del usuario';
         if ($patching_employee) return 'Usuario modificado exitosamente';
+    }
+
+    // DELETE employee
+    public function delete_employee($document) {
+        $remove_employee = $this->model->delete_employee($document);
+
+        if ($remove_employee == 500) return 'Hubo un error al eliminar el empleado selecionado';
+        if ($remove_employee) return 'Empleado y usuario eliminados exitosamente';
     }
 }
 
