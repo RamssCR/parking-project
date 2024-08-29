@@ -90,7 +90,7 @@ class ParkingModel {
             );
 
             if (!$trigger_createUser) return 500;
-            return true;
+            return 201;
         } else {
             return 500;
         }

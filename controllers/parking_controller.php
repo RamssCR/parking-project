@@ -71,8 +71,8 @@ class ParkingController {
         $create_newEmployee = $this->model->create_employee($employee);
 
         if (!$create_newEmployee) return 'Ya existe un usuario con el mismo número de documento o correo electrónico';
+        if ($create_newEmployee == 201) return 'Empleado y Usuario creado exitosamente';
         if ($create_newEmployee == 500) return 'Hubo un error al agregar un nuevo empleado';
-        if ($create_newEmployee) return 'Empleado y Usuario creado exitosamente';
     }
 
     // PATCH employee
