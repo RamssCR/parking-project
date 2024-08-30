@@ -12,7 +12,7 @@
             'role' => mysqli_real_escape_string($conn, strip_tags($_POST['role'], ENT_QUOTES))
         ]; 
 
-        $request = new parkingcontroller();
+        $request = new ParkingController();
         $create_employee = $request->create_employee($employee);
     }
 ?>
