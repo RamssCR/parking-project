@@ -5,12 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventario de Repuestos de Motos</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="../../styles/admin.css" rel="stylesheet">
+    <script>
+        function deleteEmployee(documento, email) {
+            if (confirm("¿Estás seguro de que deseas eliminar este empleado?")) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", `delete_employee.php?document=${documento}&email=${email}`, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var response = xhr.responseText;
+                        if (response.includes("exitosamente")) {
+                            var row = document.getElementById(`row-${documento}`);
+                            if (row) {
+                                row.parentNode.removeChild(row);
+                            }
+                            alert("Empleado eliminado exitosamente");
+                        } else {
+                            alert("Error al eliminar el empleado");
+                        }
+                    }
+                };
+                xhr.send();
+            }
+        }
+    </script>
 </head>
 <body class="bg-gray-100 text-gray-900">
-    <?php  include '../reutils/navbar.php' ?>
+    <?php include '../reutils/navbar.php'; ?>
 
     <!-- Main Content -->
     <div id="content" class="m-0">
@@ -50,10 +72,11 @@
                         </tr>
                     </thead>
                     <tbody id="inventory-body" class="bg-gray-50">
-                        <?php include 'list_employee.php' ?>
+                        <?php include 'list_employee.php'; ?>
                     </tbody>
                 </table>
             </div>
         </main>
     </div>
+</body>
 </html>
