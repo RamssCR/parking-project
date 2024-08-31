@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventario de Repuestos de Motos</title>
+    <title>Parking Penta | Dashboard</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="../../styles/admin.css" rel="stylesheet">
     <script>
+        //funcion para eliminar un empleado
         function deleteEmployee(documento, email) {
             if (confirm("¿Estás seguro de que deseas eliminar este empleado?")) {
                 var xhr = new XMLHttpRequest();
@@ -31,7 +32,7 @@
         }
     </script>
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="bg-gray text-gray-900">
     <?php include '../reutils/navbar.php'; ?>
 
     <!-- Main Content -->
@@ -78,5 +79,13 @@
             </div>
         </main>
     </div>
+
+    <script>
+        const registers = document.querySelector('#inventory-body')
+
+        if (registers.childElementCount === 0) {
+            registers.insertAdjacentHTML("afterbegin", '<span class="text-center font-semibold w-100 block py-3">No hay empleados</span>');
+        }
+    </script>
 </body>
 </html>
