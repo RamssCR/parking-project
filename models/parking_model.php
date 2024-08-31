@@ -105,13 +105,13 @@ class ParkingModel {
         
         if ($employee['role'] == 'Admin') {
             $updatedEmployee = mysqli_execute_query($this->connection, 'UPDATE admin SET documento = ?, nombre = ?, telefono = ? WHERE documento = ?', 
-                [$employee['document'], $employee['name'], $employee['email'], $employee['phone'], $document]
+                [$document, $employee['name'], $employee['phone'], $document]
             );
             if (!$updatedEmployee) return 500;
             return 200;
         } else if ($employee['role'] == 'Empleado') {
             $updatedEmployee = mysqli_execute_query($this->connection, 'UPDATE empleados SET documento = ?, nombre = ?, telefono = ? WHERE documento = ?', 
-                [$employee['document'], $employee['name'], $employee['email'], $employee['phone'], $document]
+                [$document, $employee['name'], $employee['phone'], $document]
             );
             if (!$updatedEmployee) return 500;
             return 200;
