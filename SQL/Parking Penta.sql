@@ -39,14 +39,7 @@ CREATE TABLE `admin` (
 -- Volcado de datos para la tabla `admin`
 --
 
-INSERT INTO `admin` (`id`, `documento`, `nombre`, `email`, `telefono`) VALUES
-(1, 1018741691, 'Maria Valencia', 'mariagv@gmail.com', '3128216442'),
-(2, 1082375241, 'Antonio Botero', 'antonio_12_b@gmail.com', '3104880912'),
-(4, 100238974, 'Camila', 'camila_12@gmail.com', '3120182636'),
-(5, 19129366, 'Ana Carla', 'ana_carla_33@hotmail.com', '3120012880'),
-(6, 1416680, 'Robert Pérez', 'robert.j12@gmail.com', '3040018926'),
-(7, 30900021, 'Karla Bustamante', 'karlacc@outlook.es', '3115928177'),
-(8, 30900022, 'Juan Gómez', 'juan_gomez@gmail.com', '3002401267');
+
 
 -- --------------------------------------------------------
 
@@ -81,12 +74,6 @@ CREATE TABLE `empleados` (
 -- Volcado de datos para la tabla `empleados`
 --
 
-INSERT INTO `empleados` (`id`, `documento`, `nombre`, `email`, `telefono`) VALUES
-(1, 1083473822, 'Angel Bustamante', 'angelbst_0101@hotmail.com', '3019182612'),
-(2, 1082375241, 'Sara Ospina', 'sara077@hotmail.com', '3019182612'),
-(3, 5023538, 'RamssC16', 'ramsesgpm@gmail.com', '3237832452'),
-(26, 30900020, 'Ernesto Ramírez', 'ernesto_ramirez@hotmail.com', '3102030952'),
-(28, 5001012, 'Ximena Toro', 'ximetorowert_@yahoo.es', '3152037108');
 
 -- --------------------------------------------------------
 
@@ -119,15 +106,7 @@ CREATE TABLE `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id_usuario`, `email`, `password`, `tipo_usuario`) VALUES
-(2, 'camila_12@gmail.com', '$2y$10$hhI2huLUpxAGdOmMWW/Vi.XBamaO64hdeUwr/LjBhOgmsnRZXpapC', 'Admin'),
-(3, 'ramsesgpm@gmail.com', '$2y$10$U1jhQplkzywNdhXh5SQsh.gLIqwJ2dTcGJAlXqC3wwDZ2PMGs77qm', 'Empleado'),
-(9, 'ana_carla_33@hotmail.com', '$2y$10$DzZfslHlW7mkEYCF859mh.IijCCCCSfHF4YsZQCUTm0ECK7rVqAAq', 'Admin'),
-(10, 'robert.j12@gmail.com', '$2y$10$0zJlfp5oaWHRjpp4WoRV0OyiiQw1nypZLsFUJ8mCU4CdyxGwtTO7C', 'Admin'),
-(12, 'karlacc@outlook.es', '$2y$10$iBKDtjWVNdPoNq8w5vmLR.2paaVLyPiTvlqmMz9F2ZQN/ITGqhcJy', 'Admin'),
-(14, 'ernesto_ramirez@hotmail.com', '$2y$10$9M0vou2s.ahi/4.c0xx4J..WyEaFzXpurcjyEgJISEz9Ksm9Jblm6', 'Empleado'),
-(16, 'ximetorowert_@yahoo.es', '$2y$10$J9ycJ0LT8sMy0jhIycTbf.5.nj12nVc9oVAQejIvTJMnZ.iV78mia', 'Empleado'),
-(17, 'juan_gomez@gmail.com', '$2y$10$b/LrTI.Q0x4mpbmZHLwYSuFLmHC1WZWumpVyuOvZO8PwUvJ6g2qJa', 'Admin');
+
 
 -- --------------------------------------------------------
 
