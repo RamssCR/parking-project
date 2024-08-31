@@ -2,10 +2,8 @@
 require_once("controllers/auth_controller.php");
 
 if (isset($_POST['login'])){
-
     $auth = new AuthController($_POST['email'], $_POST['password'], $_POST['role']);
     $login = $auth->login();
-
 }
     
 ?>
@@ -21,11 +19,13 @@ if (isset($_POST['login'])){
         <div class="form-container">
             <h1>Iniciar sesión</h1>
             <?php
-                if (is_string($login)) {
-                    echo '<span>' . $login . '<span>';
-                } else { 
-                    echo '<span>' . $login['email'] . '<span>';
-                }  
+                if (isset($login)) {
+                    if (is_string($login)) {
+                        echo '<span>' . $login . '<span>';
+                    } else { 
+                        echo '<span>' . $login['email'] . '<span>';
+                    }  
+                }
             ?>
             <form method="post">
                 <div class="container-group">

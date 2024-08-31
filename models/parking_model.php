@@ -108,18 +108,18 @@ class ParkingModel {
                 [$employee['document'], $employee['name'], $employee['email'], $employee['phone'], $document]
             );
             if (!$updatedEmployee) return 500;
-            return true;
+            return 200;
         } else if ($employee['role'] == 'Empleado') {
             $updatedEmployee = mysqli_execute_query($this->connection, 'UPDATE empleados SET documento = ?, nombre = ?, telefono = ? WHERE documento = ?', 
                 [$employee['document'], $employee['name'], $employee['email'], $employee['phone'], $document]
             );
             if (!$updatedEmployee) return 500;
-            return true;
+            return 200;
         }
     }
 
     // Delete an employee
-    public function delete_employee($document, $email) : bool | int {
+    public function delete_employee($document, $email) {
         $foundEmployee = mysqli_execute_query($this->connection, 'SELECT * FROM admin WHERE documento = ?', [$document]);
 
         if ($foundEmployee) {
@@ -131,7 +131,7 @@ class ParkingModel {
         if ($remove_employee) {
             $trigger_removeUser = mysqli_execute_query($this->connection, 'DELETE FROM usuarios WHERE email = ?', [$email]);
             if (!$trigger_removeUser) return 500;
-            return true;
+            return 200;
         } else {
             return 500;
         }
