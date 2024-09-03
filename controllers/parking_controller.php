@@ -9,8 +9,6 @@ class EmployeeController {
         $this->model = new EmployeeModel();
     }
 
-    // EMPLOYEES
-
     // Show all employees
     public function showAll_employees() {
         return $this->model->getAll_employees();
