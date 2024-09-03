@@ -12,7 +12,7 @@
             'role' => mysqli_real_escape_string($conn, strip_tags($_POST['role'], ENT_QUOTES))
         ]; 
 
-        $request = new ParkingController();
+        $request = new EmployeeController();
         $create_employee = $request->create_employee($employee);
     }
 ?>
@@ -22,7 +22,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Empleado</title>
+    <title>Parking Penta | Crear Empleado</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="../../styles/admin.css" rel="stylesheet">

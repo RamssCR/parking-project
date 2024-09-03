@@ -8,16 +8,15 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="../../styles/admin.css" rel="stylesheet">
     <script>
-        //funcion para eliminar un empleado
         function deleteEmployee(documento, email) {
             if (confirm("¿Estás seguro de que deseas eliminar este empleado?")) {
-                var xhr = new XMLHttpRequest();
+                const xhr = new XMLHttpRequest();
                 xhr.open("GET", `delete_employee.php?document=${documento}&email=${email}`, true);
-                xhr.onreadystatechange = function () {
+                xhr.onreadystatechange = () => {
                     if (xhr.readyState == 4 && xhr.status == 200) {
-                        var response = xhr.responseText;
+                        const response = xhr.responseText;
                         if (response.includes("exitosamente")) {
-                            var row = document.getElementById(`row-${documento}`);
+                            const row = document.getElementById(`row-${documento}`);
                             if (row) {
                                 row.parentNode.removeChild(row);
                             }

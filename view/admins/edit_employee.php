@@ -4,7 +4,7 @@
 
     
     if (isset($_GET['document'])) {
-        $request = new ParkingController();
+        $request = new EmployeeController();
 
         $document = $_GET['document'];
         $employee = $request->show_employee($document);
@@ -30,7 +30,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Empleado</title>
+    <title>Parking Penta | Editar Empleado</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="../../styles/admin.css" rel="stylesheet">

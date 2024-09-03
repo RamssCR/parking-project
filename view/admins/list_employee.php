@@ -3,7 +3,7 @@
 
 require_once('../../controllers/parking_controller.php');
 
-$controller = new ParkingController();
+$controller = new EmployeeController();
 $employees = $controller->showAll_employees();
 
 if (isset($_POST['delete'])) {
