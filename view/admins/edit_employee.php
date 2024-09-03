@@ -1,6 +1,12 @@
 <?php
+    session_start();
+
     require_once('../../controllers/parking_controller.php');
+    require_once('../../models/validators/login_validation.php');
     require_once('../../connection.php');
+
+    validateLogin();
+    $user = $_SESSION['user'];
 
     
     if (isset($_GET['document'])) {
@@ -16,7 +22,7 @@
             'document' => mysqli_real_escape_string($conn, strip_tags($document, ENT_QUOTES)),
             'name' => mysqli_real_escape_string($conn, strip_tags($_POST['name'], ENT_QUOTES)),
             'phone' => mysqli_real_escape_string($conn, strip_tags($_POST['phone'], ENT_QUOTES)),
-            'role' => mysqli_real_escape_string($conn, strip_tags($_POST['role'], ENT_QUOTES)),
+            'role' => mysqli_real_escape_string($conn, strip_tags($employee['tipo_usuario'], ENT_QUOTES)),
         ]; 
 
         $patch_employee = $request->patch_employee($document, $employee);
@@ -49,7 +55,10 @@
                         <img id="logo-preview" src="default-logo.png" alt="Logo">
                         <input id="logo-input" type="file" accept="image/*" class="hidden">
                     </div>
-                    <h1 class="text-2xl text-white font-bold ml-4">PARKING-PROJECT</h1>
+                    <div class="flex flex-col">
+                        <h1 class="text-2xl text-white font-bold ml-4">PARKING PENTA</h1>
+                        <h1 class="text-xl font-bold ml-4" style="color: #EEEEEE;"><?=$user['nombre_usuario']?></h1>
+                    </div>
                 </div>
                 <div>
                     <button class="bg-white text-blue-800 px-4 py-2 rounded-lg shadow-md hover:bg-blue-100">
@@ -86,10 +95,8 @@
                     </div>
                     <div class="flex flex-col">
                         <label for="role" class="text-gray-700">Rol</label>
-                        <select id="role" name="role" required class="mt-1 p-2 border border-gray-300 rounded-md">
-                            <option value="">-- Seleccione Rol --</option>
-                            <option value="Admin">Administrador</option>
-                            <option value="Empleado">Empleado</option>
+                        <select id="role" name="role" required class="mt-1 p-2 border border-gray-300 rounded-md" disabled>
+                            <option value='<?=$employee['tipo_usuario'] ?>'><?= $employee['tipo_usuario'] == 'Admin' ? 'Administrador' : 'Empleado' ?></option>
                         </select>
                     </div>
                     <div>

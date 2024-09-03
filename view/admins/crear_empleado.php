@@ -1,6 +1,12 @@
 <?php
+    session_start();
+
     require_once('../../controllers/parking_controller.php');
+    require_once('../../models/validators/login_validation.php');
     require_once('../../connection.php');
+
+    validateLogin();
+    $user = $_SESSION['user'];
 
     if (isset($_POST['send'])){
         
@@ -29,7 +35,7 @@
 </head>
 <body class="bg-gray-100 text-gray-900">
 
-    <?php  include '../reutils/navbar.php' ?>
+    <?php include '../reutils/navbar.php' ?>
     
     <!-- Main Content -->
     <div id="content" class="ml-64 p-6">
@@ -40,7 +46,10 @@
                         <img id="logo-preview" src="default-logo.png" alt="Logo">
                         <input id="logo-input" type="file" accept="image/*" class="hidden">
                     </div>
-                    <h1 class="text-2xl text-white font-bold ml-4">PARKING-PROJECT</h1>
+                    <div class="flex flex-col">
+                        <h1 class="text-2xl text-white font-bold ml-4">PARKING PENTA</h1>
+                        <h1 class="text-xl font-bold ml-4" style="color: #EEEEEE;"><?=$user['nombre_usuario']?></h1>
+                    </div>
                 </div>
                 <div>
                     <button class="bg-white text-blue-800 px-4 py-2 rounded-lg shadow-md hover:bg-blue-100">

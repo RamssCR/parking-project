@@ -1,3 +1,12 @@
+<?php
+    session_start();
+    require_once('../../controllers/parking_controller.php');
+    require_once('../../models/validators/login_validation.php');
+
+    validateLogin();
+    $user = $_SESSION['user'];
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -43,7 +52,10 @@
                         <img id="logo-preview" src="default-logo.png" alt="Logo">
                         <input id="logo-input" type="file" accept="image/*" class="hidden">
                     </div>
-                    <h1 class="text-2xl text-white font-bold ml-4">PARKING-PROJECT</h1>
+                    <div class="flex flex-col">
+                        <h1 class="text-2xl text-white font-bold ml-4">PARKING PENTA</h1>
+                        <h1 class="text-xl font-bold ml-4" style="color: #EEEEEE;"><?=$user['nombre_usuario']?></h1>
+                    </div>
                 </div>
                 <div>
                     <button class="bg-white text-blue-800 px-4 py-2 rounded-lg shadow-md hover:bg-blue-100">
@@ -68,6 +80,7 @@
                             <th class="py-3 px-4 text-left">Nombre</th>
                             <th class="py-3 px-4 text-left">Email</th>
                             <th class="py-3 px-4 text-left">Teléfono</th>
+                            <th class="py-3 px-4 text-left">Puesto</th>
                             <th class="py-3 px-4 text-left">Acciones</th>
                         </tr>
                     </thead>

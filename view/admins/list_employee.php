@@ -1,6 +1,4 @@
 <?php
-
-
 require_once('../../controllers/parking_controller.php');
 
 $controller = new EmployeeController();
@@ -17,6 +15,7 @@ while ($employee = mysqli_fetch_assoc($employees)) {
     echo "<td class='py-3 px-4'>{$employee['nombre']}</td>";
     echo "<td class='py-3 px-4'>{$employee['email']}</td>";
     echo "<td class='py-3 px-4'>{$employee['telefono']}</td>";
+    echo "<td class='py-3 px-4'>{$employee['tipo_usuario']}</td>";
     echo "<td class='py-3 px-4'>
             <a href='edit_employee.php?document={$employee['documento']}' class='text-blue-500 hover:underline'>Editar</a>
             <a href='#' class='text-red-500 hover:underline ml-2' onclick='deleteEmployee(\"{$employee['documento']}\", \"{$employee['email']}\")'>Eliminar</a>
