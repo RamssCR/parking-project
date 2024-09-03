@@ -9,12 +9,18 @@ class EmployeeModel {
 
     // Get all employees
     public function getAll_employees() {
-        return mysqli_execute_query($this->connection, 'SELECT * FROM admin UNION SELECT * FROM empleados');
+        return mysqli_execute_query($this->connection, 
+            'SELECT admin.documento, admin.nombre, admin.email, admin.telefono, usuarios.tipo_usuario FROM admin INNER JOIN usuarios ON admin.email = usuarios.email UNION
+             SELECT empleados.documento, empleados.nombre, empleados.email, empleados.telefono, usuarios.tipo_usuario FROM empleados INNER JOIN usuarios ON empleados.email = usuarios.email');
     }
 
     // Get an employee
     public function get_employee($id) : array | bool {
-        $employee = mysqli_execute_query($this->connection, 'SELECT * FROM admin WHERE documento = ? UNION SELECT * FROM empleados WHERE documento = ?',
+        $employee = mysqli_execute_query($this->connection, 
+            'SELECT admin.documento, admin.nombre, admin.email, admin.telefono, usuarios.tipo_usuario 
+             FROM admin INNER JOIN usuarios ON admin.email = usuarios.email WHERE documento = ? UNION 
+             SELECT empleados.documento, empleados.nombre, empleados.email, empleados.telefono, usuarios.tipo_usuario 
+             FROM empleados INNER JOIN usuarios ON empleados.email = usuarios.email WHERE documento = ?',
             [$id, $id]
         );
 
@@ -43,8 +49,8 @@ class EmployeeModel {
         if ($createEmployee) {
             $passwordToHash = 'parking_' . $employee['document'];
             $password = password_hash($passwordToHash, PASSWORD_BCRYPT);
-            $trigger_createUser = mysqli_execute_query($this->connection, 'INSERT INTO usuarios (email, password, tipo_usuario) VALUES (?, ?, ?)',
-                [$employee['email'], $password, $employee['role']]
+            $trigger_createUser = mysqli_execute_query($this->connection, 'INSERT INTO usuarios (nombre_usuario, email, password, tipo_usuario) VALUES (?, ?, ?, ?)',
+                [$employee['name'], $employee['email'], $password, $employee['role']]
             );
 
             if (!$trigger_createUser) return 500;
