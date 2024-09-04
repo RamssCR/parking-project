@@ -46,6 +46,19 @@ form {
     padding: 0.3em 0 0.8em 0;
 }
 
+.form-container .error{
+    color: #d4210d;
+    display: block;
+    text-align: center;
+    padding: 0.5em;
+    background-color: #ffd8d8;
+    font-weight: 600;
+    border: 2px solid #e9240e;
+    border-radius: 0.2em;
+    font-size: 0.9em;
+    margin: -1em 0 0.4em 0;
+}
+
 form .container-group{
     display: flex;
     flex-direction: column;
