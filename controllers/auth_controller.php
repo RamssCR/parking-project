@@ -17,15 +17,12 @@ class AuthController {
         if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) return 'El correo ingresado es invalido';
 
         $validate_password = validatePassword($this->password);
-        if ($validate_password != true) return $validate_password;
+        if (is_string($validate_password)) return $validate_password;
 
         $init_login = new AuthModel($this->email, $this->password, $this->role);
         $login = $init_login->login();
         if (!$login) return 'Usuario o contraseña incorrectas';
         return $login;
-
-        // todo --> admin and employee website
-        // $login['tipo_usuario'] == 'Admin' ? header('location: admin') : header('location: employee');
     }
 }
 
