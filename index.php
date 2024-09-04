@@ -29,7 +29,7 @@ if (isset($_POST['login'])){
             <?php
                 if (isset($login)) {
                     if (is_string($login)) {
-                        echo '<span>' . $login . '<span>';
+                        echo '<span class="error">' . $login . '</span>';
                     }
                 }
             ?>
