@@ -1,9 +1,17 @@
-<?php 
+<?php
+session_start();
 require_once("controllers/auth_controller.php");
 
 if (isset($_POST['login'])){
     $auth = new AuthController($_POST['email'], $_POST['password'], $_POST['role']);
     $login = $auth->login();
+
+    if (!is_string($login)) {
+        $_SESSION['user'] = $login;
+        $_SESSION['isAuth'] = true;
+
+        $login['tipo_usuario'] == 'Admin' ? header('location: view/admins/admin.php') : header('location: view/empleados/employee.php');
+    }
 }
     
 ?>
@@ -21,10 +29,8 @@ if (isset($_POST['login'])){
             <?php
                 if (isset($login)) {
                     if (is_string($login)) {
-                        echo '<span>' . $login . '<span>';
-                    } else { 
-                        echo '<span>' . $login['email'] . '<span>';
-                    }  
+                        echo '<span class="error">' . $login . '</span>';
+                    }
                 }
             ?>
             <form method="post">

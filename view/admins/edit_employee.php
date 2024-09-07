@@ -1,15 +1,22 @@
 <?php
+    session_start();
+
     require_once('../../controllers/parking_controller.php');
+    require_once('../../models/validators/login_validation.php');
     require_once('../../connection.php');
+
+    validateLogin();
+    $user = $_SESSION['user'];
 
     
     if (isset($_GET['document'])) {
-        $request = new ParkingController();
+        $request = new EmployeeController();
 
         $document = $_GET['document'];
         $employee = $request->show_employee($document);
     }
 
+<<<<<<< HEAD
     if (isset($_POST['update'])) {
         if (!empty($_POST['name']) && !empty($_POST['phone']) && !empty($_POST['role'])) {
             $employee = [
@@ -26,6 +33,19 @@
         } else {
             echo 'Los campos no pueden estar vacíos.';
         }
+=======
+    if (isset($_POST['update'])){
+        
+        $employee = [
+            'document' => mysqli_real_escape_string($conn, strip_tags($document, ENT_QUOTES)),
+            'name' => mysqli_real_escape_string($conn, strip_tags($_POST['name'], ENT_QUOTES)),
+            'phone' => mysqli_real_escape_string($conn, strip_tags($_POST['phone'], ENT_QUOTES)),
+            'role' => mysqli_real_escape_string($conn, strip_tags($employee['tipo_usuario'], ENT_QUOTES)),
+        ]; 
+
+        $patch_employee = $request->patch_employee($document, $employee);
+        if ($patch_employee) header('location: admin.php');
+>>>>>>> 9c4d4587a4322f4cf94881c8de9eabebd1b7bc9b
     }
     
 
@@ -36,7 +56,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Empleado</title>
+    <title>Parking Penta | Editar Empleado</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="../../styles/admin.css" rel="stylesheet">
@@ -55,7 +75,10 @@
                         <img id="logo-preview" src="default-logo.png" alt="Logo">
                         <input id="logo-input" type="file" accept="image/*" class="hidden">
                     </div>
-                    <h1 class="text-2xl text-white font-bold ml-4">PARKING-PROJECT</h1>
+                    <div class="flex flex-col">
+                        <h1 class="text-2xl text-white font-bold ml-4">PARKING PENTA</h1>
+                        <h1 class="text-xl font-bold ml-4" style="color: #EEEEEE;"><?=$user['nombre_usuario']?></h1>
+                    </div>
                 </div>
                 <div>
                     <button class="bg-white text-blue-800 px-4 py-2 rounded-lg shadow-md hover:bg-blue-100">
@@ -92,10 +115,8 @@
                     </div>
                     <div class="flex flex-col">
                         <label for="role" class="text-gray-700">Rol</label>
-                        <select id="role" name="role" required class="mt-1 p-2 border border-gray-300 rounded-md">
-                            <option value="">-- Seleccione Rol --</option>
-                            <option value="Admin">Administrador</option>
-                            <option value="Empleado">Empleado</option>
+                        <select id="role" name="role" required class="mt-1 p-2 border border-gray-300 rounded-md" disabled>
+                            <option value='<?=$employee['tipo_usuario'] ?>'><?= $employee['tipo_usuario'] == 'Admin' ? 'Administrador' : 'Empleado' ?></option>
                         </select>
                     </div>
                     <div>

@@ -1,62 +1,26 @@
 <?php
 
-class ParkingModel {
+class EmployeeModel {
     private $connection;
 
     public function __construct() {
         $this->connection = mysqli_connect('localhost', 'root', '', 'dbpenta');
     }
 
-    // GET requests
-
-    // Customers
-
-    // Get all customers
-    public function getAll_customers() {
-        return mysqli_execute_query($this->connection, 'SELECT * FROM clientes');
-    }
-
-    // Get one customer
-    public function get_customer($id) : array | bool {
-        $get_customer = mysqli_execute_query($this->connection, 'SELECT * FROM clientes WHERE id_cliente = ?', [$id]);
-        if (!$get_customer) return false;
-
-        return mysqli_fetch_assoc($get_customer);
-    }
-
-    // Vehicles
-
-    // Get all vehicles info
-    public function getAll_vehicles() {
-        return mysqli_execute_query($this->connection, 'SELECT * FROM vehiculos');
-    }
-
-    // Get all customer's vehicles
-    public function getAll_vehicles_customer($id_customer) {
-        $vehicles = mysqli_execute_query($this->connection, 'SELECT * FROM vehiculos WHERE id_cliente = ?', [$id_customer]);
-        if (!$vehicles) return false;
-
-        return $vehicles;
-    }
-
-    // Get one vehicle
-    public function get_vehicle($id) : array | bool {
-        $vehicle = mysqli_execute_query($this->connection, 'SELECT * FROM vehiculos WHERE id_vehiculo = ?', [$id]);
-        if (!$vehicle) return false;
-
-        return mysqli_fetch_assoc($vehicle);
-    }
-
-    // Employees
-
     // Get all employees
     public function getAll_employees() {
-        return mysqli_execute_query($this->connection, 'SELECT * FROM admin UNION SELECT * FROM empleados');
+        return mysqli_execute_query($this->connection, 
+            'SELECT admin.documento, admin.nombre, admin.email, admin.telefono, usuarios.tipo_usuario FROM admin INNER JOIN usuarios ON admin.email = usuarios.email UNION
+             SELECT empleados.documento, empleados.nombre, empleados.email, empleados.telefono, usuarios.tipo_usuario FROM empleados INNER JOIN usuarios ON empleados.email = usuarios.email');
     }
 
     // Get an employee
     public function get_employee($id) : array | bool {
-        $employee = mysqli_execute_query($this->connection, 'SELECT * FROM admin WHERE documento = ? UNION SELECT * FROM empleados WHERE documento = ?',
+        $employee = mysqli_execute_query($this->connection, 
+            'SELECT admin.documento, admin.nombre, admin.email, admin.telefono, usuarios.tipo_usuario 
+             FROM admin INNER JOIN usuarios ON admin.email = usuarios.email WHERE documento = ? UNION 
+             SELECT empleados.documento, empleados.nombre, empleados.email, empleados.telefono, usuarios.tipo_usuario 
+             FROM empleados INNER JOIN usuarios ON empleados.email = usuarios.email WHERE documento = ?',
             [$id, $id]
         );
 
@@ -85,8 +49,8 @@ class ParkingModel {
         if ($createEmployee) {
             $passwordToHash = 'parking_' . $employee['document'];
             $password = password_hash($passwordToHash, PASSWORD_BCRYPT);
-            $trigger_createUser = mysqli_execute_query($this->connection, 'INSERT INTO usuarios (email, password, tipo_usuario) VALUES (?, ?, ?)',
-                [$employee['email'], $password, $employee['role']]
+            $trigger_createUser = mysqli_execute_query($this->connection, 'INSERT INTO usuarios (nombre_usuario, email, password, tipo_usuario) VALUES (?, ?, ?, ?)',
+                [$employee['name'], $employee['email'], $password, $employee['role']]
             );
 
             if (!$trigger_createUser) return 500;

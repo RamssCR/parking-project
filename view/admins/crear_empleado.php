@@ -1,7 +1,11 @@
 <?php
+    session_start();
+
     require_once('../../controllers/parking_controller.php');
+    require_once('../../models/validators/login_validation.php');
     require_once('../../connection.php');
 
+<<<<<<< HEAD
     if (isset($_POST['send'])) {
         if (!empty($_POST['document_ID']) && !empty($_POST['name']) && !empty($_POST['email']) && !empty($_POST['phone']) && !empty($_POST['role'])) {
             $employee = [
@@ -17,6 +21,23 @@
         } else {
             echo 'Los campos no pueden estar vacíos.';
         }
+=======
+    validateLogin();
+    $user = $_SESSION['user'];
+
+    if (isset($_POST['send'])){
+        
+        $employee = [
+            'document' => mysqli_real_escape_string($conn, strip_tags($_POST['document_ID'], ENT_QUOTES)),
+            'name' => mysqli_real_escape_string($conn, strip_tags($_POST['name'], ENT_QUOTES)),
+            'email' => mysqli_real_escape_string($conn, strip_tags($_POST['email'], ENT_QUOTES)),
+            'phone' => mysqli_real_escape_string($conn, strip_tags($_POST['phone'], ENT_QUOTES)),
+            'role' => mysqli_real_escape_string($conn, strip_tags($_POST['role'], ENT_QUOTES))
+        ]; 
+
+        $request = new EmployeeController();
+        $create_employee = $request->create_employee($employee);
+>>>>>>> 9c4d4587a4322f4cf94881c8de9eabebd1b7bc9b
     }
     
 ?>
@@ -26,14 +47,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Empleado</title>
+    <title>Parking Penta | Crear Empleado</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="../../styles/admin.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 text-gray-900">
 
-    <?php  include '../reutils/navbar.php' ?>
+    <?php include '../reutils/navbar.php' ?>
     
     <!-- Main Content -->
     <div id="content" class="ml-64 p-6">
@@ -44,7 +65,10 @@
                         <img id="logo-preview" src="default-logo.png" alt="Logo">
                         <input id="logo-input" type="file" accept="image/*" class="hidden">
                     </div>
-                    <h1 class="text-2xl text-white font-bold ml-4">PARKING-PROJECT</h1>
+                    <div class="flex flex-col">
+                        <h1 class="text-2xl text-white font-bold ml-4">PARKING PENTA</h1>
+                        <h1 class="text-xl font-bold ml-4" style="color: #EEEEEE;"><?=$user['nombre_usuario']?></h1>
+                    </div>
                 </div>
                 <div>
                     <button class="bg-white text-blue-800 px-4 py-2 rounded-lg shadow-md hover:bg-blue-100">

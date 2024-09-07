@@ -1,0 +1,1 @@
+- Carpeta de javascript que se va a compartir entre los devs del front-end y del back-end

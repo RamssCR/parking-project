@@ -2,8 +2,8 @@
 
 > Encargados de cada área:
 
-- Frontend: Tomás Osorio, Jesús Mazo
-- Backend: Ramsés Pérez, Juan Diego Franco
+- Frontend: Tomás Osorio, Jesús Mazo, Juan Diego Franco
+- Backend: Ramsés Pérez
 - Base de Datos: Jesús Mazo ✅
 
 # FRONTEND
@@ -14,6 +14,8 @@
 - view
 - index.php
 - images
+- reutils
+- JS
 
 # BACKEND
 
@@ -22,6 +24,7 @@
 - controllers
 - models
 - uploads
+- JS
 
 # BASE DE DATOS
 
