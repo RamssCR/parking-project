@@ -2,19 +2,23 @@
     require_once('../../controllers/parking_controller.php');
     require_once('../../connection.php');
 
-    if (isset($_POST['send'])){
-        
-        $employee = [
-            'document' => mysqli_real_escape_string($conn, strip_tags($_POST['document_ID'], ENT_QUOTES)),
-            'name' => mysqli_real_escape_string($conn, strip_tags($_POST['name'], ENT_QUOTES)),
-            'email' => mysqli_real_escape_string($conn, strip_tags($_POST['email'], ENT_QUOTES)),
-            'phone' => mysqli_real_escape_string($conn, strip_tags($_POST['phone'], ENT_QUOTES)),
-            'role' => mysqli_real_escape_string($conn, strip_tags($_POST['role'], ENT_QUOTES))
-        ]; 
-
-        $request = new ParkingController();
-        $create_employee = $request->create_employee($employee);
+    if (isset($_POST['send'])) {
+        if (!empty($_POST['document_ID']) && !empty($_POST['name']) && !empty($_POST['email']) && !empty($_POST['phone']) && !empty($_POST['role'])) {
+            $employee = [
+                'document' => mysqli_real_escape_string($conn, strip_tags($_POST['document_ID'], ENT_QUOTES)),
+                'name' => mysqli_real_escape_string($conn, strip_tags($_POST['name'], ENT_QUOTES)),
+                'email' => mysqli_real_escape_string($conn, strip_tags($_POST['email'], ENT_QUOTES)),
+                'phone' => mysqli_real_escape_string($conn, strip_tags($_POST['phone'], ENT_QUOTES)),
+                'role' => mysqli_real_escape_string($conn, strip_tags($_POST['role'], ENT_QUOTES))
+            ]; 
+    
+            $request = new ParkingController();
+            $create_employee = $request->create_employee($employee);
+        } else {
+            echo 'Los campos no pueden estar vacíos.';
+        }
     }
+    
 ?>
 
 <!DOCTYPE html>
