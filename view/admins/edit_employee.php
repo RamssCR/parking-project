@@ -10,18 +10,24 @@
         $employee = $request->show_employee($document);
     }
 
-    if (isset($_POST['update'])){
-        
-        $employee = [
-            'document' => mysqli_real_escape_string($conn, strip_tags($document, ENT_QUOTES)),
-            'name' => mysqli_real_escape_string($conn, strip_tags($_POST['name'], ENT_QUOTES)),
-            'phone' => mysqli_real_escape_string($conn, strip_tags($_POST['phone'], ENT_QUOTES)),
-            'role' => mysqli_real_escape_string($conn, strip_tags($_POST['role'], ENT_QUOTES)),
-        ]; 
-
-        $patch_employee = $request->patch_employee($document, $employee);
-        if ($patch_employee) header('location: admin.php');
+    if (isset($_POST['update'])) {
+        if (!empty($_POST['name']) && !empty($_POST['phone']) && !empty($_POST['role'])) {
+            $employee = [
+                'document' => mysqli_real_escape_string($conn, strip_tags($document, ENT_QUOTES)),
+                'name' => mysqli_real_escape_string($conn, strip_tags($_POST['name'], ENT_QUOTES)),
+                'phone' => mysqli_real_escape_string($conn, strip_tags($_POST['phone'], ENT_QUOTES)),
+                'role' => mysqli_real_escape_string($conn, strip_tags($_POST['role'], ENT_QUOTES)),
+            ]; 
+    
+            $patch_employee = $request->patch_employee($document, $employee);
+            if ($patch_employee) {
+                header('Location: admin.php');
+            }
+        } else {
+            echo 'Los campos no pueden estar vacíos.';
+        }
     }
+    
 
 ?>
 
