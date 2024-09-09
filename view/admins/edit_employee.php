@@ -7,6 +7,7 @@
 
     validateLogin();
     $user = $_SESSION['user'];
+    $user_pfp = '../../images/' . $user['pic_user'];
 
     
     if (isset($_GET['document'])) {
@@ -16,24 +17,6 @@
         $employee = $request->show_employee($document);
     }
 
-<<<<<<< HEAD
-    if (isset($_POST['update'])) {
-        if (!empty($_POST['name']) && !empty($_POST['phone']) && !empty($_POST['role'])) {
-            $employee = [
-                'document' => mysqli_real_escape_string($conn, strip_tags($document, ENT_QUOTES)),
-                'name' => mysqli_real_escape_string($conn, strip_tags($_POST['name'], ENT_QUOTES)),
-                'phone' => mysqli_real_escape_string($conn, strip_tags($_POST['phone'], ENT_QUOTES)),
-                'role' => mysqli_real_escape_string($conn, strip_tags($_POST['role'], ENT_QUOTES)),
-            ]; 
-    
-            $patch_employee = $request->patch_employee($document, $employee);
-            if ($patch_employee) {
-                header('Location: admin.php');
-            }
-        } else {
-            echo 'Los campos no pueden estar vacíos.';
-        }
-=======
     if (isset($_POST['update'])){
         
         $employee = [
@@ -45,7 +28,6 @@
 
         $patch_employee = $request->patch_employee($document, $employee);
         if ($patch_employee) header('location: admin.php');
->>>>>>> 9c4d4587a4322f4cf94881c8de9eabebd1b7bc9b
     }
     
 
@@ -72,8 +54,7 @@
             <div class="container mx-auto flex justify-between items-center">
                 <div class="flex items-center">
                     <div id="logo-container">
-                        <img id="logo-preview" src="default-logo.png" alt="Logo">
-                        <input id="logo-input" type="file" accept="image/*" class="hidden">
+                        <img id="logo-preview" src='<?= $user_pfp ?>' alt="Logo">
                     </div>
                     <div class="flex flex-col">
                         <h1 class="text-2xl text-white font-bold ml-4">PARKING PENTA</h1>
@@ -128,15 +109,15 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', () => {
             const statusMessage = document.getElementById('status-message');
             if (statusMessage && statusMessage.classList.contains('hidden') === false) {
-                setTimeout(function() {
+                setTimeout(() => {
                     statusMessage.classList.add('fade-out');
-                    setTimeout(function() {
+                    setTimeout(() => {
                         statusMessage.classList.add('hidden');
                     }, 1000); 
-                }, 4000); // Tiempo en milisegundos (4 segundos)
+                }, 4000);
             }
         });
     </script>

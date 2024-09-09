@@ -5,6 +5,7 @@
 
     validateLogin();
     $user = $_SESSION['user'];
+    $user_pfp = '../../images/' . $user['pic_user'];
 ?>
 
 <!DOCTYPE html>
@@ -49,8 +50,7 @@
             <div class="container mx-auto flex justify-between items-center">
                 <div class="flex items-center">
                     <div id="logo-container">
-                        <img id="logo-preview" src="default-logo.png" alt="Logo">
-                        <input id="logo-input" type="file" accept="image/*" class="hidden">
+                        <img id="logo-preview" src='<?= $user_pfp ?>' alt="Logo">
                     </div>
                     <div class="flex flex-col">
                         <h1 class="text-2xl text-white font-bold ml-4">PARKING PENTA</h1>
