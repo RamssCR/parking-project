@@ -28,6 +28,33 @@ class VehicleController {
 
         return $vehicle;
     }
+
+    // Create a vehicle
+    public function create_vehicle($vehicle, $customer, $employee) {
+        $insertVehicle = $this->model->create_vehicle($vehicle, $customer, $employee);
+
+        if (!$insertVehicle) return 'Ya existe un vehículo registrado con esa placa';
+        if ($insertVehicle == 500) return 'Hubo un error al registrar el vehículo';
+        if ($insertVehicle == 201) return 'Vehículo registrado exitosamente';
+    }
+
+    // Edit a vehicle's information
+    public function edit_vehicle($id, $vehicle) {
+        $updateVehicle = $this->model->edit_vehicle($id, $vehicle);
+
+        if (!$updateVehicle) return 'Este vehículo no se encuentra registrado';
+        if ($updateVehicle == 500) return 'Hubo un error al actualizar los datos del vehículo';
+        if ($updateVehicle == 200) return 'La información del vehículo fue modificada exitosamente';
+    }
+
+    // Disable a vehicle
+    public function disable_vehicle($id) {
+        $disableVehicle = $this->model->disable_vehicle($id);
+
+        if (!$disableVehicle) return 'El vehículo a eliminar no existe';
+        if ($disableVehicle == 500) return 'Hubo un error al eliminar el vehículo';
+        if ($disableVehicle == 200) return 'Vehículo eliminado exitosamente';
+    }
 }
 
 
