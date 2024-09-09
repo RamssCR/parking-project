@@ -9,12 +9,12 @@ class CustomerModel {
 
     // Get all customers
     public function getAll_customers() {
-        return mysqli_execute_query($this->connection, 'SELECT * FROM clientes WHERE deshabilitado = 0');
+        return mysqli_execute_query($this->connection, 'SELECT * FROM clientes WHERE deshabilitado = ?', [0]);
     }
 
     // Get one customer
     public function get_customer($id) : array | bool {
-        $get_customer = mysqli_execute_query($this->connection, 'SELECT * FROM clientes WHERE id_cliente = ? AND deshabilitado = 0', [$id]);
+        $get_customer = mysqli_execute_query($this->connection, 'SELECT * FROM clientes WHERE id_cliente = ? AND deshabilitado = ?', [$id, 0]);
         if (!$get_customer) return false;
 
         return mysqli_fetch_assoc($get_customer);
