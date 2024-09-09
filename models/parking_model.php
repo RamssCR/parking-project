@@ -19,7 +19,7 @@ class EmployeeModel {
         $employee = mysqli_execute_query($this->connection, 
             'SELECT admin.documento, admin.nombre, admin.email, admin.telefono, usuarios.tipo_usuario 
              FROM admin INNER JOIN usuarios ON admin.email = usuarios.email WHERE documento = ? UNION 
-             SELECT empleados.documento, empleados.nombre, empleados.email, empleados.telefono, usuarios.tipo_usuario 
+             SELECT empleados.documento, empleados.nombre, empleados.email, empleados.telefono, usuarios.tipo_usuario, usuarios.pic_user
              FROM empleados INNER JOIN usuarios ON empleados.email = usuarios.email WHERE documento = ?',
             [$id, $id]
         );
