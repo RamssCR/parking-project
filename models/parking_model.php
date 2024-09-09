@@ -88,7 +88,11 @@ class EmployeeModel {
 
         if ($foundEmployee) {
             $remove_employee = mysqli_execute_query($this->connection, 'DELETE FROM admin WHERE documento = ?', [$document]);
-        } else {
+        }
+
+        $foundEmployee2 = mysqli_execute_query($this->connection, 'SELECT * FROM empleados WHERE documento = ?', [$document]);
+
+        if ($foundEmployee2) {
             $remove_employee = mysqli_execute_query($this->connection, 'DELETE FROM empleados WHERE documento = ?', [$document]);
         }
 
