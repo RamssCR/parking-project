@@ -53,3 +53,14 @@ body {
 .hidden {
     display: none;
 }
+
+table tbody tr td .customer{
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+    color: #002e92;
+}
+
+table tbody tr td .customer:hover{
+    text-decoration: underline;
+}
