@@ -23,7 +23,7 @@ class CustomerModel {
     // Create a customer
     public function create_customer($customer) : int | bool {
         $isExisting = mysqli_execute_query($this->connection, 'SELECT * FROM clientes WHERE documento = ?', [$customer['document']]);
-        if ($isExisting) return false;
+        if (!$isExisting) return false;
 
         $insertCustomer = mysqli_execute_query($this->connection, 'INSERT INTO clientes (documento, nombre, ciudad, direccion, telefono, email) VALUES (?, ?, ?, ?, ?, ?)',
             [$customer['document'], $customer['name'], $customer['city'], $customer['address'], $customer['phone'], $customer['email']]
