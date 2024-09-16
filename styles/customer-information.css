@@ -1,0 +1,47 @@
+:root{
+    --customer-container-bg: #E1E1E1;
+    --border-color: #E8E8E8;
+    --underline-color: #CCCCCC;
+}
+
+.customer-container{
+    background-color: var(--customer-container-bg);
+    width: 100%;
+    min-height: 15em;
+    position: relative;
+    border: 3px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.customer-container .customer-logo{
+    width: 8em;
+    height: 8em;
+    border: 3px solid var(--border-color);
+    border-radius: 50%;
+    position: absolute;
+    top: -3.8em;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.customer-container h2{
+    text-align: center;
+    padding-top: 3.5em;
+    font-weight: 700;
+    font-size: 1.5em;
+}
+
+.customer-container .customer-info-container{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-bottom: 1px solid var(--underline-color);
+    padding-bottom: 0.6em;
+}
+
+.customer-container .customer-info-container .info-card{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
