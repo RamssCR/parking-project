@@ -10,7 +10,7 @@ if (isset($_POST['delete'])) {
 while ($employee = mysqli_fetch_assoc($employees)) {
     echo "<tr id='row-{$employee['documento']}'>";
     echo "<td class='py-3 px-4'>{$employee['documento']}</td>";
-    echo "<td class='py-3 px-4'>{$employee['nombre']}</td>";
+    echo "<td class='py-3 px-4'><a class='customer' href='cliente_info.php?id_cliente={$employee['id_cliente']}'><img src='../../images/user-regular.svg' alt='user' style='width: 1.5em' />{$employee['nombre']}</a></td>";
     echo "<td class='py-3 px-4'>{$employee['ciudad']}</td>";
     echo "<td class='py-3 px-4'>{$employee['telefono']}</td>";
     echo "<td class='py-3 px-4'>{$employee['email']}</td>";
