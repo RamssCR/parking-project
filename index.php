@@ -1,6 +1,9 @@
 <?php
 session_start();
 require_once("controllers/auth_controller.php");
+require_once('models/validators/login_validation.php');
+
+isLogged();
 
 if (isset($_POST['login'])){
     $auth = new AuthController($_POST['email'], $_POST['password'], $_POST['role']);
@@ -10,7 +13,7 @@ if (isset($_POST['login'])){
         $_SESSION['user'] = $login;
         $_SESSION['isAuth'] = true;
 
-        $login['tipo_usuario'] == 'Admin' ? header('location: view/admins/admin.php') : header('location: view/empleados/employee.php');
+        $login['tipo_usuario'] == 'Admin' ? header('location: view/admins/admin.php') : header('location: view/empleados/empleado.php');
     }
 }
     
