@@ -21,7 +21,7 @@
         function deleteEmployee(documento, email) {
             if (confirm("¿Estás seguro de que deseas eliminar este cliente?")) {
                 const xhr = new XMLHttpRequest();
-                xhr.open("GET", `delete_employee.php?document=${documento}`, true);
+                xhr.open("GET", `delete_client.php?document=${documento}`, true);
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         const response = xhr.responseText;

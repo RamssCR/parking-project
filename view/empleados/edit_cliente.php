@@ -1,35 +1,35 @@
 <?php
-    session_start();
+session_start();
 
-    require_once('../../controllers/customer_controller.php');
-    require_once('../../models/validators/login_validation.php');
-    require_once('../../connection.php');
+require_once('../../controllers/customer_controller.php');
+require_once('../../models/validators/login_validation.php');
+require_once('../../connection.php');
 
-    validateLogin();
-    $user = $_SESSION['user'];
-    $user_pfp = '../../images/' . $user['pic_user'];
+validateLogin();
+$user = $_SESSION['user'];
+$user_pfp = '../../images/' . $user['pic_user'];
 
-    $request = new CustomerController();
-    if (isset($_GET['id_cliente'])) {
-        $document = $_GET['id_cliente'];
-        $getCustomer = $request->show_customer($document);
-    }
+$request = new CustomerController();
+if (isset($_GET['id_cliente'])) {
+    $document = $_GET['id_cliente'];
+    $getCustomer = $request->show_customer($document);
+}
 
-    if (isset($_POST['send'])){
+if (isset($_POST['send'])){
+    
+    $customer = [
+        'address' => mysqli_real_escape_string($conn, strip_tags($_POST['direccion'], ENT_QUOTES)),
+        'city' => mysqli_real_escape_string($conn, strip_tags($_POST['ciudad'], ENT_QUOTES)),
+        'name' => mysqli_real_escape_string($conn, strip_tags($_POST['name'], ENT_QUOTES)),
+        'email' => mysqli_real_escape_string($conn, strip_tags($_POST['email'], ENT_QUOTES)),
+        'phone' => mysqli_real_escape_string($conn, strip_tags($_POST['phone'], ENT_QUOTES)),
+        'document' => mysqli_real_escape_string($conn, strip_tags($_POST['document_ID'], ENT_QUOTES))
         
-        $customer = [
-            'address' => mysqli_real_escape_string($conn, strip_tags($_POST['dirreccion'], ENT_QUOTES)),
-            'city' => mysqli_real_escape_string($conn, strip_tags($_POST['ciudad'], ENT_QUOTES)),
-            'name' => mysqli_real_escape_string($conn, strip_tags($_POST['name'], ENT_QUOTES)),
-            'email' => mysqli_real_escape_string($conn, strip_tags($_POST['email'], ENT_QUOTES)),
-            'phone' => mysqli_real_escape_string($conn, strip_tags($_POST['phone'], ENT_QUOTES)),
-            'document' => mysqli_real_escape_string($conn, strip_tags($_POST['document_ID'], ENT_QUOTES))
-           
-        ]; 
+    ]; 
 
-        $edit_client = $request->edit_customer($getCustomer['documento'], $customer);
-        if ($edit_client) header('location: empleado.php');
-    }
+    $edit_client = $request->edit_customer($getCustomer['documento'], $customer);
+    if ($edit_client) header('location: empleado.php');
+}
     
 ?>
 
@@ -49,24 +49,7 @@
     
     <!-- Main Content -->
     <div id="content" class="ml-64 p-6">
-        <nav class="bg-blue-900 p-4 w-full rounded-md mb-6">
-            <div class="container mx-auto flex justify-between items-center">
-                <div class="flex items-center">
-                    <div id="logo-container">
-                        <img id="logo-preview" src='<?= $user_pfp ?>' alt="Logo">
-                    </div>
-                    <div class="flex flex-col">
-                        <h1 class="text-2xl text-white font-bold ml-4">PARKING PENTA</h1>
-                        <h1 class="text-xl font-bold ml-4" style="color: #EEEEEE;"><?=$user['nombre_usuario']?></h1>
-                    </div>
-                </div>
-                <div>
-                    <button class="bg-white text-blue-800 px-4 py-2 rounded-lg shadow-md hover:bg-blue-100">
-                        Cerrar Sesión
-                    </button>
-                </div>
-            </div>
-        </nav>
+        <?php include '../reutils/navbar-user.php' ?>
 
         <!-- Formulario de Crear Empleado -->
         <main class="container mx-auto mt-10">
@@ -83,7 +66,7 @@
                     </div>
                     <div class="flex flex-col">
                         <label for="name" class="text-gray-700">Nombre</label>
-                        <input type="text" id="name" value='<?= $getCustomer['nombre'] ?>' name="name" placeholder="ej. Ana Pérez" required class="mt-1 p-2 border border-gray-300 rounded-md">
+                        <input type="text" id="name" value='<?= $getCustomer['nombre'] ?>' name="name" placeholder="ej. Bogotá" required class="mt-1 p-2 border border-gray-300 rounded-md">
                     </div>
                     <div class="flex flex-col">
                         <label for="name" class="text-gray-700">Ciudad</label>
@@ -91,7 +74,7 @@
                     </div>
                     <div class="flex flex-col">
                         <label for="" class="text-gray-700">Direccion</label>
-                        <input type="text" id="name" value='<?= $getCustomer['direccion'] ?>' name="direccion" placeholder="ej.  Cl 93A No. 43-79 " required class="mt-1 p-2 border border-gray-300 rounded-md">
+                        <input type="text" id="name" value='<?= $getCustomer['direccion'] ?>' name="direccion" placeholder="ej. Cl 93A No. 43-79 " required class="mt-1 p-2 border border-gray-300 rounded-md">
                     </div>
                     <div class="flex flex-col">
                         <label for="email" class="text-gray-700">Correo</label>
