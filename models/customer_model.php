@@ -51,7 +51,7 @@ class CustomerModel {
         $isEnabled = mysqli_execute_query($this->connection, 'SELECT * FROM clientes WHERE documento = ? AND deshabilitado = ?', [$document, 0]);
         if (!$isEnabled) return false;
 
-        $disableCustomer = mysqli_execute_query($this->connection, 'UPDATE cliente SET deshabilitado = ? WHERE documento = ?', [1, $document]);
+        $disableCustomer = mysqli_execute_query($this->connection, 'UPDATE clientes SET deshabilitado = ? WHERE documento = ?', [1, $document]);
         if (!$disableCustomer) return 500;
         return 200;
     }
