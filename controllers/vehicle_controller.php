@@ -21,6 +21,12 @@ class VehicleController {
         return $vehicles;
     }
 
+    // Count all customer's vehicles
+    public function countAll_vehicles_customer($id_customer) {
+        $vehicles = $this->model->countAll_vehicles_customer($id_customer);
+        return $vehicles;
+    }
+
     // Show a vehicle
     public function show_vehicle($id) {
         $vehicle = $this->model->get_vehicle($id);

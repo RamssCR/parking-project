@@ -20,6 +20,12 @@ class VehicleModel {
         return $vehicles;
     }
 
+    // Count all customer's vehicles
+    public function countAll_vehicles_customer($id_customer) : int {
+        $counter = mysqli_execute_query($this->connection, 'SELECT COUNT(*) FROM vehiculos WHERE id_cliente = ? AND deshabilitado = ?', [$id_customer, 0]);
+        return $counter->fetch_row()[0];
+    }
+
     // Get one vehicle
     public function get_vehicle($id) : array | bool {
         $vehicle = mysqli_execute_query($this->connection, 'SELECT * FROM vehiculos WHERE placa = ? AND deshabilitado = ?', [$id, 0]);
