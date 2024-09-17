@@ -115,13 +115,25 @@ main{
     background-color: var(--card-bg);
     display: flex;
     align-items: center;
-    gap: 1em;
+    justify-content: space-between;
     padding: 0.5em 0.8em;
 }
 
-.all-vehicles .vehicle-card .car-card-header img{
+.all-vehicles .vehicle-card .car-card-header .separator{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.all-vehicles .vehicle-card .car-card-header .separator img{
     width: 3em;
     height: 3em;
+}
+
+.all-vehicles .vehicle-card .car-card-header .edit{
+    width: 1.5em;
+    height: 1.5em;
+    opacity: 0;
 }
 
 .all-vehicles .vehicle-card .car-card-header .car-card-title{

@@ -71,8 +71,8 @@ if (isset($_GET['id_cliente'])) {
                     </div>
                 </div>
             </div>
-            <div class="to-register">
-                <h2 class="text-2xl font-semibold my-4 pl-4">Vehículos registrados</h2>
+            <div class="to-register px-4">
+                <h2 class="text-2xl font-semibold my-4">Vehículos registrados</h2>
                 <a href="crear_vehiculo.php"><span class="add">+</span></a>
             </div>
             <section class="all-vehicles px-4">
@@ -82,8 +82,11 @@ if (isset($_GET['id_cliente'])) {
                     while ($vehicles = mysqli_fetch_assoc($showAll_vehicles)) {?>                    
                         <div class="vehicle-card">
                             <header class="car-card-header">
-                                <img src="../../images/<?= $vehicles['tipo_vehiculo'] == 'carro' ? 'car-solid.svg' : 'motorcycle-solid.svg' ?>" alt="car">
-                                <h3 class="car-card-title"><?= $vehicles['modelo'] ?></h3>
+                                <div class="separator">
+                                    <img src="../../images/<?= $vehicles['tipo_vehiculo'] == 'carro' ? 'car-solid.svg' : 'motorcycle-solid.svg' ?>" alt="car">
+                                    <h3 class="car-card-title"><?= $vehicles['modelo'] ?></h3>
+                                </div>
+                                <a href="editar_vehiculo.php?placa=<?= $vehicles['placa'] ?>"><img src="../../images/pencil-solid.svg" class="edit"/></a>
                             </header>
                             <div class="car-card-info">
                                 <div class="card-info-group">
@@ -114,5 +117,7 @@ if (isset($_GET['id_cliente'])) {
             </section>
         </main>
     </div>
+
+    <script src="../../JS/displayEdit.js"></script>
 </body>
 </html>
