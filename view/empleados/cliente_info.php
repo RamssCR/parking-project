@@ -36,7 +36,7 @@ if (isset($_GET['id_cliente'])) {
 <body class="bg-gray-100 text-gray-900">
     <?php include '../reutils/navbar.php' ?>
     
-    <div id="content" class="ml-64 p-6 w-100">
+    <div id="content" class="ml-64 p-6">
         <?php include '../reutils/navbar-user.php'?>
 
         <main class="mt-10 px-5">
@@ -73,7 +73,7 @@ if (isset($_GET['id_cliente'])) {
             </div>
             <div class="to-register px-4">
                 <h2 class="text-2xl font-semibold my-4">Vehículos registrados</h2>
-                <a href="crear_vehiculo.php"><span class="add">+</span></a>
+                <a href="crear_vehiculo.php?id_customer=<?= $showCustomer['id_cliente'] ?>"><span class="add">+</span></a>
             </div>
             <section class="all-vehicles px-4">
                 <?php
