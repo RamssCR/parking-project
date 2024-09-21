@@ -209,3 +209,9 @@ main{
     position: absolute;
     top: 2em;
 }
+
+@media screen and (width <= 1200px) {
+    .customer-container{
+        width: 30em;
+    }
+}
