@@ -22,9 +22,8 @@ if (isset($_GET['id_cliente'])) {
 }
 ?>
 
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,27 +42,27 @@ if (isset($_GET['id_cliente'])) {
             <h2 class="text-3xl font-semibold mb-4 pl-4">Información del Cliente</h2>
             <div class="customer-container">
                 <img src="../../images/blank-avatar.webp" alt="customer" class="customer-logo">
-                <h2 class="text-xl font-semibold mb-4"><?= $showCustomer['nombre'] ?></h2>
+                <h2 class="text-xl font-semibold mb-4"><?= htmlspecialchars($showCustomer['nombre']) ?></h2>
                 <div class="customer-info-container mx-6 px-6">
                     <div class="info-card">
                         <span class="info-title font-semibold">Documento</span>
-                        <span class="info-data"><?= $showCustomer['documento'] ?></span>
+                        <span class="info-data"><?= htmlspecialchars($showCustomer['documento']) ?></span>
                     </div>
                     <div class="info-card">
                         <span class="info-title font-semibold">Ciudad de Residencia</span>
-                        <span class="info-data"><?= $showCustomer['ciudad'] ?></span>
+                        <span class="info-data"><?= htmlspecialchars($showCustomer['ciudad']) ?></span>
                     </div>
                     <div class="info-card">
                         <span class="info-title font-semibold">Dirección</span>
-                        <span class="info-data"><?= $showCustomer['direccion'] ?></span>
+                        <span class="info-data"><?= htmlspecialchars($showCustomer['direccion']) ?></span>
                     </div>
                     <div class="info-card">
                         <span class="info-title font-semibold">Télefono</span>
-                        <span class="info-data"><?= $showCustomer['telefono'] ?></span>
+                        <span class="info-data"><?= htmlspecialchars($showCustomer['telefono']) ?></span>
                     </div>
                     <div class="info-card">
                         <span class="info-title font-semibold">Email</span>
-                        <span class="info-data"><?= $showCustomer['email'] ?></span>
+                        <span class="info-data"><?= htmlspecialchars($showCustomer['email']) ?></span>
                     </div>
                     <div class="info-card">
                         <span class="info-title font-semibold">Vehículos Registrados</span>
@@ -79,35 +78,35 @@ if (isset($_GET['id_cliente'])) {
                 <?php
                     if ($countedCars == 0) echo '<span class="empty">No hay Vehículos Registrados</span>';
 
-                    while ($vehicles = mysqli_fetch_assoc($showAll_vehicles)) {?>                    
+                    while ($vehicles = mysqli_fetch_assoc($showAll_vehicles)) { ?>                    
                         <div class="vehicle-card">
                             <header class="car-card-header">
                                 <div class="separator">
                                     <img src="../../images/<?= $vehicles['tipo_vehiculo'] == 'carro' ? 'car-solid.svg' : 'motorcycle-solid.svg' ?>" alt="car">
-                                    <h3 class="car-card-title"><?= $vehicles['modelo'] ?></h3>
+                                    <h3 class="car-card-title"><?= htmlspecialchars($vehicles['modelo']) ?></h3>
                                 </div>
-                                <a href="editar_vehiculo.php?placa=<?= $vehicles['placa'] ?>"><img src="../../images/pencil-solid.svg" class="edit"/></a>
+                                <a href="editar_vehiculo.php?placa=<?= urlencode($vehicles['placa']) ?>"><img src="../../images/pencil-solid.svg" class="edit"/></a>
                             </header>
                             <div class="car-card-info">
                                 <div class="card-info-group">
                                     <span class="title">Placa</span>
-                                    <span class="data"><?= $vehicles['placa'] ?></span>
+                                    <span class="data"><?= htmlspecialchars($vehicles['placa']) ?></span>
                                 </div>
                                 <div class="card-info-group">
                                     <span class="title">Marca</span>
-                                    <span class="data"><?= $vehicles['marca'] ?></span>
+                                    <span class="data"><?= htmlspecialchars($vehicles['marca']) ?></span>
                                 </div>
                                 <div class="card-info-group">
                                     <span class="title">Año</span>
-                                    <span class="data"><?= $vehicles['ano'] ?></span>
+                                    <span class="data"><?= htmlspecialchars($vehicles['ano']) ?></span>
                                 </div>
                                 <div class="card-info-group">
                                     <span class="title">Modelo</span>
-                                    <span class="data"><?= $vehicles['modelo'] ?></span>
+                                    <span class="data"><?= htmlspecialchars($vehicles['modelo']) ?></span>
                                 </div>
                             </div>
                             <div class="btns-group">
-                                <a href="#">Ver Vehículo</a>
+                                <a href="info_vehiculo.php?placa=<?= urlencode($vehicles['placa']) ?>">Ver Vehículo</a>
                                 <a href="#">Eliminar</a>
                             </div>
                         </div>
