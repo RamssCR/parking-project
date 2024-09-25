@@ -5,6 +5,9 @@ class VehicleModel {
 
     public function __construct() {
         $this->connection = mysqli_connect('localhost', 'root', '', 'dbpenta');
+        if (mysqli_connect_errno()) {
+            die("Connection failed: " . mysqli_connect_error());
+        }
     }
 
     // Get all vehicles info
@@ -21,13 +24,13 @@ class VehicleModel {
     }
 
     // Count all customer's vehicles
-    public function countAll_vehicles_customer($id_customer) : int {
+    public function countAll_vehicles_customer($id_customer): int {
         $counter = mysqli_execute_query($this->connection, 'SELECT COUNT(*) FROM vehiculos WHERE id_cliente = ? AND deshabilitado = ?', [$id_customer, 0]);
         return $counter->fetch_row()[0];
     }
 
     // Get one vehicle
-    public function get_vehicle($id) : array | bool {
+    public function get_vehicle($id): array | bool {
         $vehicle = mysqli_execute_query($this->connection, 'SELECT * FROM vehiculos WHERE placa = ? AND deshabilitado = ?', [$id, 0]);
         if (!$vehicle) return false;
 
@@ -35,7 +38,7 @@ class VehicleModel {
     }
 
     // Register a vehicle
-    public function create_vehicle($vehicle, $customer, $employee) : int | bool {
+    public function create_vehicle($vehicle, $customer, $employee): int | bool {
         $isExisting = mysqli_execute_query($this->connection, 'SELECT * FROM vehiculos WHERE placa = ?', [$vehicle['plate']]);
         if (mysqli_num_rows($isExisting) >= 1) return false;
 
@@ -48,7 +51,7 @@ class VehicleModel {
     }
 
     // Edit a vehicle's information
-    public function edit_vehicle($id, $vehicle) : int | bool {
+    public function edit_vehicle($id, $vehicle): int | bool {
         $isExisting = mysqli_execute_query($this->connection, 'SELECT * FROM vehiculos WHERE placa = ?', [$id]);
         if (mysqli_num_rows($isExisting) == 0) return false;
 
@@ -61,11 +64,11 @@ class VehicleModel {
     }
 
     // Disable a vehicle
-    public function disable_vehicle($id) : int | bool {
+    public function disable_vehicle($id): int | bool {
         $isExisting = mysqli_execute_query($this->connection, 'SELECT * FROM vehiculos WHERE placa = ?', [$id]);
         if (mysqli_num_rows($isExisting) == 0) return false;
 
-        $disableVehicle = mysqli_execute_query($this->connection, 'UPDATE vehiculo SET deshabilitado = ? WHERE placa = ?', [1, $id]);
+        $disableVehicle = mysqli_execute_query($this->connection, 'UPDATE vehiculos SET deshabilitado = ? WHERE placa = ?', [1, $id]);
 
         if (!$disableVehicle) return 500;
         return 200;
