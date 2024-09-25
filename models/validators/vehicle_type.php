@@ -1,6 +1,6 @@
 <?php
 function isVehicle($plate) {
-    $splittedPlate = explode("", $plate);
-    return is_string($splittedPlate[6]) ? 'moto' : 'carro';
+    $splittedPlate = str_split($plate);
+    return is_numeric($splittedPlate[6]) ? 'carro' : 'moto';
 }
 ?>
