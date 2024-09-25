@@ -3,7 +3,6 @@
     --border-color: #E5E7EB;
     --underline-color: #D1D5DB;
     --card-bg: #1E40AF;
-    --highlight-color: #3B82F6;
     --text-color: #374151;
 }
 
@@ -70,7 +69,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 0.3em;
-    padding: 0.5em;
+    padding: 0.6em 0.8em;
     background-color: #fff;
     border: 1px solid var(--border-color);
     border-radius: 0.5em;
@@ -87,7 +86,7 @@ main {
     width: 2em;
     height: 2em;
     border-radius: 50%;
-    background-color: var(--highlight-color);
+    background-color: var(--card-bg);
     color: #ffffff;
     font-weight: 700;
     display: flex;
@@ -103,18 +102,23 @@ main {
     box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 
+.to-register a .add{
+    margin-top: -0.2em;
+}
+
 .all-vehicles {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(15em, 21em));
     gap: 1.5em;
-    margin-top: 1em;
+    margin: 1em 0;
+    position: relative;
 }
 
 .all-vehicles .vehicle-card {
     background-color: #E1E1E1;
-    padding: 1em;
-    border-radius: 0.5em;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 0.2em;
+    overflow: hidden;
+    box-shadow: 0.3em 0.3em 0.4em #77777766;
 }
 
 .all-vehicles .vehicle-card .car-card-header {
@@ -122,8 +126,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5em;
-    border-radius: 0.5em 0.5em 0 0;
+    padding: 0.6em 0.8em;
 }
 
 .all-vehicles .vehicle-card .car-card-header .separator {
@@ -137,9 +140,25 @@ main {
     height: 3em;
 }
 
+.all-vehicles .vehicle-card .car-card-header .edit{
+    width: 2em;
+    height: 2em;
+    opacity: 0;
+}
+
 .all-vehicles .vehicle-card .car-card-title {
     color: #ffffff;
     font-size: 1.5em;
+    font-weight: 600;
+}
+
+.all-vehicles .vehicle-card .car-card-info .card-info-group{
+    display: flex;
+    flex-direction: column;
+    gap: 0.4em;
+}
+
+.all-vehicles .vehicle-card .car-card-info .card-info-group .title{
     font-weight: 600;
 }
 
@@ -153,7 +172,7 @@ main {
 .all-vehicles .vehicle-card .btns-group {
     display: flex;
     justify-content: space-between;
-    padding: 0.5em;
+    padding: 0.5em 0.5em 1em 0.5em;
 }
 
 .all-vehicles .vehicle-card .btns-group a {
@@ -167,14 +186,14 @@ main {
     transition: .3s;
 }
 
-.all-vehicles .vehicle-card .btns-group a:first-of-type {
+.all-vehicles .vehicle-card .btns-group a:first-child {
     color: #ffffff;
     background-color: var(--card-bg);
 }
 
-.all-vehicles .vehicle-card .btns-group a:first-of-type:hover {
-    background-color: var(--highlight-color);
+.all-vehicles .vehicle-card .btns-group a:first-child:hover {
     transform: translateY(-2px);
+    filter: brightness(115%);
 }
 
 .all-vehicles .vehicle-card .btns-group a:nth-child(2) {
@@ -193,4 +212,7 @@ main {
     font-weight: 700;
     text-align: center;
     margin: 2em 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }

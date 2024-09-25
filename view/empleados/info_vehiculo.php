@@ -1,12 +1,7 @@
-0	6	Gamer Jesús	Peluche	$0.00	Peluche	contado	Imagen	2024-09-25 20:48:28	pendiente	  m e esta saliendo en 0 por que aqui se valida la compra <?php
+<?php
 session_start();
 include_once("./config/config.php");
 
-// Verificar si el usuario está autenticado
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php?message=Debes%20iniciar%20sesión%20para%20confirmar%20la%20compra');
-    exit;
-}
 
 $userId = $_SESSION['user_id'];
 
