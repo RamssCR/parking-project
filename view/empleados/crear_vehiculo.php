@@ -3,6 +3,7 @@
 
     require_once('../../controllers/vehicle_controller.php');
     require_once('../../models/validators/login_validation.php');
+    require_once('../../models/validators/vehicle_type.php');
     require_once('../../controllers/parking_controller.php');
     require_once('../../connection.php');
 
@@ -16,16 +17,19 @@
         header('location: empleado.php');
     }
 
-    if (isset($_POST['send'])){        
+    if (isset($_POST['send'])){
+        $vehicle_type = isVehicle($_POST['placa']);
+
         $vehicle = [
             'plate' => mysqli_real_escape_string($conn, strip_tags($_POST['placa'], ENT_QUOTES)),
             'brand' => mysqli_real_escape_string($conn, strip_tags($_POST['marca'], ENT_QUOTES)),
             'model' => mysqli_real_escape_string($conn, strip_tags($_POST['modelo'], ENT_QUOTES)),
-            'year' => mysqli_real_escape_string($conn, strip_tags($_POST['year'], ENT_QUOTES))
+            'year' => mysqli_real_escape_string($conn, strip_tags($_POST['year'], ENT_QUOTES)),
+            'type' => $vehicle_type
         ]; 
 
         $request = new VehicleController();
-        $create_customer = $request->create_vehicle($vehicle, $customer, 1);
+        $create_vehicle = $request->create_vehicle($vehicle, $customer, 38);
     }
     
 ?>
@@ -45,13 +49,13 @@
     <?php include '../reutils/navbar.php' ?>
     
     <!-- Main Content -->
-    <div id="content" class="ml-64 p-6">
+    <div id="content" class="ml-64 p-6 w-90 overflow-hidden">
         <?php include '../reutils/navbar-user.php' ?>
 
         <!-- Formulario de Crear Empleado -->
         <main class="container mx-auto mt-10">
-            <div id="status-message" class="mb-4 px-4 py-2 rounded-lg <?php echo isset($create_customer) && str_contains($create_customer, 'Cliente') ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'; ?> <?php echo !isset($create_customer) ? 'hidden' : ''; ?>">
-                <?php echo isset($create_customer) ? $create_customer : ''; ?>
+            <div id="status-message" class="mb-4 px-4 py-2 rounded-lg <?php echo isset($create_vehicle) && str_contains($create_vehicle, 'Vehículo') ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'; ?> <?php echo !isset($create_vehicle) ? 'hidden' : ''; ?>">
+                <?php echo isset($create_vehicle) ? $create_vehicle : ''; ?>
             </div>
 
             <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto">
