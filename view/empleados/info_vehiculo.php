@@ -1,21 +1,156 @@
-<?php
+0	6	Gamer Jesús	Peluche	$0.00	Peluche	contado	Imagen	2024-09-25 20:48:28	pendiente	  m e esta saliendo en 0 por que aqui se valida la compra <?php
 session_start();
-require_once('../../controllers/customer_controller.php');
-require_once('../../models/validators/login_validation.php');
-require_once('../../controllers/vehicle_controller.php');
-require_once('../../connection.php');
+include_once("./config/config.php");
 
-if (!isset($_GET['placa'])) {
-    die("Placa no especificada.");
+// Verificar si el usuario está autenticado
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php?message=Debes%20iniciar%20sesión%20para%20confirmar%20la%20compra');
+    exit;
 }
 
-$placa = mysqli_real_escape_string($conn, $_GET['placa']);
-$vehicleController = new VehicleController();
-$vehicleInfo = $vehicleController->show_vehicle($placa); 
+$userId = $_SESSION['user_id'];
 
-if (!$vehicleInfo) {
-    die("Vehículo no encontrado.");
+// Función para validar el correo electrónico
+function validateEmail($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
+
+// Obtener detalles del cliente desde el formulario
+$nombre = filter_var(trim($_POST['nombre']), FILTER_SANITIZE_STRING);
+$telefono = filter_var(trim($_POST['telefono']), FILTER_SANITIZE_STRING);
+$cedula = filter_var(trim($_POST['cedula']), FILTER_SANITIZE_STRING);
+$correo = filter_var(trim($_POST['correo']), FILTER_SANITIZE_EMAIL);
+$direccion = filter_var(trim($_POST['direccion']), FILTER_SANITIZE_STRING);
+
+if (!validateEmail($correo)) {
+    die("El correo electrónico proporcionado no es válido.");
+}
+
+$metodo_pago = $_SESSION['metodo_pago'] ?? 'contado';
+
+try {
+    $conn->beginTransaction();
+
+    // Insertar datos del cliente
+    $stmt = $conn->prepare("INSERT INTO clientes (nombre, telefono, cedula, correo, direccion) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$nombre, $telefono, $cedula, $correo, $direccion]);
+
+    // Obtener detalles del carrito del usuario
+    $stmt = $conn->prepare("
+        SELECT c.id, c.user_id, c.producto_id, c.cantidad, c.subtotal, c.tipo_compra, c.fecha_agregado,
+               p.nombre_producto, p.precio_contado, p.precio_credito, p.imagen, p.precio_fijo, p.tipo_producto
+        FROM carrito c
+        JOIN productos p ON c.producto_id = p.id_producto
+        WHERE c.user_id = ?
+    ");
+    $stmt->execute([$userId]);
+    $productDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Calcular el total de la compra
+    $totalCompra = array_sum(array_column($productDetails, 'subtotal'));
+
+    // Insertar registro en la tabla de pedidos
+    $stmt = $conn->prepare("
+        INSERT INTO pedidos (user_id, estado, total, metodo_pago)
+        VALUES (?, 'pendiente', ?, ?)
+    ");
+    $stmt->execute([$userId, $totalCompra, $metodo_pago]);
+
+    // Obtener el último ID del pedido insertado
+    $pedidoId = $conn->lastInsertId();
+
+    // Insertar detalles en cliente_detalle
+    $stmt = $conn->prepare("
+        INSERT INTO cliente_detalle (user_id, nombre_cliente, producto_id, nombre_producto, precio_fijo, tipo_producto, tipo_compra, imagen, fecha_compra, pedido_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+
+    foreach ($productDetails as $product) {
+        $precioFijo = ($product['tipo_compra'] === 'contado') ? $product['precio_contado'] : $product['precio_credito'];
+
+        $stmt->execute([
+            $userId,
+            $nombre,
+            $product['producto_id'],
+            $product['nombre_producto'],
+            $precioFijo,
+            $product['tipo_producto'],
+            $product['tipo_compra'],
+            $product['imagen'],
+            date('Y-m-d H:i:s'),
+            $pedidoId // Agregar el ID del pedido
+        ]);
+
+        // Actualizar el inventario del producto
+        $stmtUpdate = $conn->prepare("
+            UPDATE productos 
+            SET cantidad = cantidad - ? 
+            WHERE id_producto = ? AND cantidad >= ?
+        ");
+        $stmtUpdate->execute([
+            $product['cantidad'],
+            $product['producto_id'],
+            $product['cantidad']
+        ]);
+
+        if ($stmtUpdate->rowCount() == 0) {
+            throw new Exception('Stock insuficiente para el producto: ' . $product['nombre_producto']);
+        }
+    }
+
+    // Eliminar productos del carrito
+    $stmt = $conn->prepare("DELETE FROM carrito WHERE user_id = ?");
+    $stmt->execute([$userId]);
+
+    $conn->commit();
+
+} catch (PDOException $e) {
+    $conn->rollBack();
+    error_log('Error en la base de datos: ' . $e->getMessage(), 3, 'error_log.txt');
+    die('Ocurrió un error con la base de datos. Por favor, inténtalo de nuevo más tarde.');
+} catch (Exception $e) {
+    $conn->rollBack();
+    error_log('Error: ' . $e->getMessage(), 3, 'error_log.txt');
+    die($e->getMessage());
+}
+
+// Preparar el mensaje para WhatsApp
+$messageBody = "*Detalles de la Compra*\n\n";
+$messageBody .= "*Información del Cliente*\n";
+$messageBody .= "• *Nombre*: " . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') . "\n";
+$messageBody .= "• *Teléfono*: " . htmlspecialchars($telefono, ENT_QUOTES, 'UTF-8') . "\n";
+$messageBody .= "• *Cédula*: " . htmlspecialchars($cedula, ENT_QUOTES, 'UTF-8') . "\n";
+$messageBody .= "• *Correo*: " . htmlspecialchars($correo, ENT_QUOTES, 'UTF-8') . "\n";
+$messageBody .= "• *Dirección*: " . htmlspecialchars($direccion, ENT_QUOTES, 'UTF-8') . "\n";
+$messageBody .= "• *Método de Pago*: " . ucfirst($metodo_pago) . "\n\n";
+
+$messageBody .= "*Detalles del Carrito*\n";
+$total = 0;
+$totalQuantity = 0;
+
+foreach ($productDetails as $product) {
+    $price = ($product['tipo_compra'] === 'contado') ? $product['precio_contado'] : $product['precio_credito'];
+
+    $messageBody .= "• *Producto*: " . htmlspecialchars($product['nombre_producto'], ENT_QUOTES, 'UTF-8') . "\n";
+    $messageBody .= "   - *Cantidad*: " . htmlspecialchars($product['cantidad'], ENT_QUOTES, 'UTF-8') . "\n";
+    $messageBody .= "   - *Tipo de Compra*: " . ucfirst($product['tipo_compra']) . "\n";
+    $messageBody .= "   - *Precio Unitario*: $" . number_format($price, 2) . "\n";
+    $messageBody .= "   - *Subtotal*: $" . number_format($product['subtotal'], 2) . "\n\n";
+
+    $total += $product['subtotal'];
+    $totalQuantity += $product['cantidad'];
+}
+
+$messageBody .= "*Resumen de la Compra*\n";
+$messageBody .= "• *Total*: $" . number_format($total, 2) . "\n";
+$messageBody .= "• *Total de Productos*: " . $totalQuantity . "\n";
+
+// Codificar el mensaje para URL
+$messageBody = urlencode($messageBody);
+
+// Crear el enlace de WhatsApp
+$whatsappNumber = '+573182925046'; // Número en formato internacional
+$whatsappMessage = "https://wa.me/{$whatsappNumber}?text=" . $messageBody;
 
 ?>
 
@@ -24,202 +159,94 @@ if (!$vehicleInfo) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles del Vehículo</title>
-    <link href="../../styles/admin.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>Confirmación de Compra</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f3f4f6;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
             color: #333;
         }
-
-        #content {
-            margin-left: 64px;
-            padding: 20px;
-        }
-
         .container {
-            display: flex;
-            justify-content: space-between;
             max-width: 800px;
-            margin: auto;
+            margin: 20px auto;
+            padding: 20px;
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
-        .details, .history {
-            flex: 1;
-            margin-right: 20px;
-        }
-
-        h2 {
+        h1 {
+            color: #28a745;
+            font-size: 1.75rem;
+            margin-bottom: 15px;
             text-align: center;
-            font-size: 28px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            color: #2563eb;
         }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 20px;
+        h2 {
+            color: #333;
+            margin-top: 20px;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
         }
-
-        .btns-group {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
+        p {
+            margin: 10px 0;
         }
-
-        a, button {
+        .btn {
             display: inline-block;
-            padding: 10px 15px;
+            padding: 10px 20px;
+            margin: 10px 0;
             border-radius: 5px;
             text-decoration: none;
+            font-weight: bold;
+            text-align: center;
             color: #fff;
-            transition: background 0.3s, transform 0.3s;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 16px;
-            border: 1px solid transparent;
+            background-color: #28a745;
         }
-
-        .bg-blue-600 {
-            background-color: #2563eb;
+        .btn:hover {
+            background-color: #218838;
         }
-
-        .bg-blue-600:hover {
-            background-color: #1d4ed8;
-            transform: scale(1.05);
-        }
-
-        .bg-red-600 {
-            background-color: #dc2626;
-        }
-
-        .bg-red-600:hover {
-            background-color: #b91c1c;
-            transform: scale(1.05);
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .info {
+            background-color: #e9ecef;
             border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .table th, .table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        .table th {
-            background-color: #f9fafb;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .table tr:hover {
-            background-color: #f1f5f9;
-        }
-
-        .section {
-            margin: 20px 0;
-            background: #f9f9f9;
             padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
         }
-
-        .icon {
-            margin-right: 5px;
+        .info p {
+            margin: 5px 0;
         }
-
-        button:hover, a:hover {
-            border: 1px solid #ddd;
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            h2 {
+                font-size: 1.25rem;
+            }
+            .btn {
+                font-size: 0.875rem;
+                padding: 8px 16px;
+            }
         }
-
-        h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            font-weight: bold;
-            color: #333;
-        }
-
     </style>
 </head>
 <body>
+    <a href="index.php">Volver</a>
+    <div class="container">
+        <h1>Compra Confirmada</h1>
+        <p>Tu compra ha sido confirmada con éxito. Puedes contactar al representante para completar el pago utilizando el siguiente enlace:</p>
+        <p style="text-align: center;">
+            <a href="<?= $whatsappMessage ?>" class="btn" target="_blank">Contactar por WhatsApp</a>
+        </p>
 
-    <?php include '../reutils/navbar.php'; ?>
-
-    <div id="content">
-        <main class="container">
-            <div class="details">
-                <h2>Detalles del Vehículo</h2>
-                <div class="grid">
-                    <p><strong>Placa:</strong> <?php echo htmlspecialchars($vehicleInfo['placa']); ?></p>
-                    <p><strong>Marca:</strong> <?php echo htmlspecialchars($vehicleInfo['marca']); ?></p>
-                    <p><strong>Modelo:</strong> <?php echo htmlspecialchars($vehicleInfo['modelo']); ?></p>
-                    <p><strong>Año:</strong> <?php echo htmlspecialchars($vehicleInfo['ano']); ?></p>
-                    <p><strong>Propietario:</strong> <?php echo htmlspecialchars($vehicleInfo['id_cliente']); ?></p>
-                </div>
-                <div class="btns-group">
-                    <a href="editar_vehiculo.php?placa=<?php echo urlencode($vehicleInfo['placa']); ?>" class="bg-blue-600">Editar Vehículo</a>
-                    <button class="bg-red-600" onclick="confirmDelete()"><i class="bi bi-trash icon"></i> Eliminar</button>
-                </div>
-            </div>
-
-            <div class="history">  
-                <h3>Historial de Pagos</h3>
-                <div class="section">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>ID Pago</th>
-                                <th>Total</th>
-                                <th>Tiempo</th>
-                                <th>Tarifa</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($paymentHistory as $payment): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($payment['id_pago']); ?></td>
-                                    <td><?php echo htmlspecialchars($payment['total']); ?></td>
-                                    <td><?php echo htmlspecialchars($payment['tiempo']) . "s"; ?></td>
-                                    <td><?php echo htmlspecialchars($payment['tarifa']); ?></td>
-                                    <td><?php echo htmlspecialchars($payment['deshabilitado'] ? 'Deshabilitado' : 'Activo'); ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="section">
-                    <button class="bg-blue-600" onclick="startPayment()">Iniciar Pago</button>
-                    <button class="bg-red-600" onclick="cancelPayment()">Cancelar Pago</button>
-                </div>
-            </div>
-        </main>
+        <div class="info">
+            <h2>Detalles de la Compra</h2>
+            <p><strong>Nombre:</strong> <?= htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') ?></p>
+            <p><strong>Total de Productos:</strong> <?= $totalQuantity ?></p>
+            <p><strong>Total a Pagar:</strong> $<?= number_format($total, 2) ?></p>
+        </div>
     </div>
-
-    <script>
-        function confirmDelete() {
-            if (confirm("¿Estás seguro de que deseas eliminar este vehículo?")) {
-                // Lógica para eliminar el vehículo
-            }
-        }
-    </script>
-
 </body>
 </html>
