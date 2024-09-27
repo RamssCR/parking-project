@@ -61,7 +61,6 @@ play.addEventListener('click', (e) => {
 })
 
 stop.addEventListener('click', (e) => {
-    e.preventDefault()
     clearInterval()
     stop_counter(id)
 })
