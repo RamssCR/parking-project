@@ -86,7 +86,7 @@ if (isset($_GET['placa'])) {
                 <form method="post" class="btns-payment-actions">
                     <button class="play">Iniciar Contador</button>
                     <button class="stop" name="calculate">Calcular Pago</button>
-                    <input class="time" type="text" value="00:00:00">
+                    <input class="time" type="text" value="00:00:00" disabled>
                     <input class="time2" type="hidden" name="time">
                 </form>
                 <h3 class="text-xl font-semibold mx-6">Pagos Recientes</h3>
