@@ -1,152 +1,46 @@
 <?php
 session_start();
-include_once("./config/config.php");
+
+require_once('../../controllers/customer_controller.php');
+require_once('../../models/validators/login_validation.php');
+require_once('../../controllers/vehicle_controller.php');
+require_once('../../controllers/payment_controller.php');
+validateLogin();
+
+$user = $_SESSION['user'];
+$user_pfp = '../../images/' . $user['pic_user'];
 
 
-$userId = $_SESSION['user_id'];
+if (isset($_GET['placa'])) {
+    $placa = $_GET['placa'];
 
-// Función para validar el correo electrónico
-function validateEmail($email) {
-    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
-}
+    $vehicle_request = new VehicleController();
+    $payment_request = new PaymentController();
 
-// Obtener detalles del cliente desde el formulario
-$nombre = filter_var(trim($_POST['nombre']), FILTER_SANITIZE_STRING);
-$telefono = filter_var(trim($_POST['telefono']), FILTER_SANITIZE_STRING);
-$cedula = filter_var(trim($_POST['cedula']), FILTER_SANITIZE_STRING);
-$correo = filter_var(trim($_POST['correo']), FILTER_SANITIZE_EMAIL);
-$direccion = filter_var(trim($_POST['direccion']), FILTER_SANITIZE_STRING);
+    // Obtener información del vehículo
+    $vehicleInfo = $vehicle_request->show_vehicle($placa);
+    $paymentInfo = $payment_request->show_vehicle_payment($vehicleInfo['id_vehiculo']);
 
-if (!validateEmail($correo)) {
-    die("El correo electrónico proporcionado no es válido.");
-}
+    // Realizamos la inserción del nuevo pago
+    if (isset($_POST['calculate'])) {
+        $base_price = $vehicleInfo['tipo_vehiculo'] == 'carro' ? 20000 : 15000;
+        $time = $_POST['time'] < 1 ? 1 : $_POST['time'];
+        $total = $base_price * $time;
+        
+        if ($time < 1) $total = $base_price;
 
-$metodo_pago = $_SESSION['metodo_pago'] ?? 'contado';
+        $request_payment = [
+            'base_price' => $base_price,
+            'time' => $time,
+            'total' => $total,
+            'id_vehicle' => $vehicleInfo['id_vehiculo']
+        ];
 
-try {
-    $conn->beginTransaction();
 
-    // Insertar datos del cliente
-    $stmt = $conn->prepare("INSERT INTO clientes (nombre, telefono, cedula, correo, direccion) VALUES (?, ?, ?, ?, ?)");
-    $stmt->execute([$nombre, $telefono, $cedula, $correo, $direccion]);
-
-    // Obtener detalles del carrito del usuario
-    $stmt = $conn->prepare("
-        SELECT c.id, c.user_id, c.producto_id, c.cantidad, c.subtotal, c.tipo_compra, c.fecha_agregado,
-               p.nombre_producto, p.precio_contado, p.precio_credito, p.imagen, p.precio_fijo, p.tipo_producto
-        FROM carrito c
-        JOIN productos p ON c.producto_id = p.id_producto
-        WHERE c.user_id = ?
-    ");
-    $stmt->execute([$userId]);
-    $productDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Calcular el total de la compra
-    $totalCompra = array_sum(array_column($productDetails, 'subtotal'));
-
-    // Insertar registro en la tabla de pedidos
-    $stmt = $conn->prepare("
-        INSERT INTO pedidos (user_id, estado, total, metodo_pago)
-        VALUES (?, 'pendiente', ?, ?)
-    ");
-    $stmt->execute([$userId, $totalCompra, $metodo_pago]);
-
-    // Obtener el último ID del pedido insertado
-    $pedidoId = $conn->lastInsertId();
-
-    // Insertar detalles en cliente_detalle
-    $stmt = $conn->prepare("
-        INSERT INTO cliente_detalle (user_id, nombre_cliente, producto_id, nombre_producto, precio_fijo, tipo_producto, tipo_compra, imagen, fecha_compra, pedido_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ");
-
-    foreach ($productDetails as $product) {
-        $precioFijo = ($product['tipo_compra'] === 'contado') ? $product['precio_contado'] : $product['precio_credito'];
-
-        $stmt->execute([
-            $userId,
-            $nombre,
-            $product['producto_id'],
-            $product['nombre_producto'],
-            $precioFijo,
-            $product['tipo_producto'],
-            $product['tipo_compra'],
-            $product['imagen'],
-            date('Y-m-d H:i:s'),
-            $pedidoId // Agregar el ID del pedido
-        ]);
-
-        // Actualizar el inventario del producto
-        $stmtUpdate = $conn->prepare("
-            UPDATE productos 
-            SET cantidad = cantidad - ? 
-            WHERE id_producto = ? AND cantidad >= ?
-        ");
-        $stmtUpdate->execute([
-            $product['cantidad'],
-            $product['producto_id'],
-            $product['cantidad']
-        ]);
-
-        if ($stmtUpdate->rowCount() == 0) {
-            throw new Exception('Stock insuficiente para el producto: ' . $product['nombre_producto']);
-        }
+        $insert_payment = $payment_request->create_payment($request_payment);
+        if ($insert_payment) header('location: info_vehiculo.php?placa='.$placa);
     }
-
-    // Eliminar productos del carrito
-    $stmt = $conn->prepare("DELETE FROM carrito WHERE user_id = ?");
-    $stmt->execute([$userId]);
-
-    $conn->commit();
-
-} catch (PDOException $e) {
-    $conn->rollBack();
-    error_log('Error en la base de datos: ' . $e->getMessage(), 3, 'error_log.txt');
-    die('Ocurrió un error con la base de datos. Por favor, inténtalo de nuevo más tarde.');
-} catch (Exception $e) {
-    $conn->rollBack();
-    error_log('Error: ' . $e->getMessage(), 3, 'error_log.txt');
-    die($e->getMessage());
 }
-
-// Preparar el mensaje para WhatsApp
-$messageBody = "*Detalles de la Compra*\n\n";
-$messageBody .= "*Información del Cliente*\n";
-$messageBody .= "• *Nombre*: " . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') . "\n";
-$messageBody .= "• *Teléfono*: " . htmlspecialchars($telefono, ENT_QUOTES, 'UTF-8') . "\n";
-$messageBody .= "• *Cédula*: " . htmlspecialchars($cedula, ENT_QUOTES, 'UTF-8') . "\n";
-$messageBody .= "• *Correo*: " . htmlspecialchars($correo, ENT_QUOTES, 'UTF-8') . "\n";
-$messageBody .= "• *Dirección*: " . htmlspecialchars($direccion, ENT_QUOTES, 'UTF-8') . "\n";
-$messageBody .= "• *Método de Pago*: " . ucfirst($metodo_pago) . "\n\n";
-
-$messageBody .= "*Detalles del Carrito*\n";
-$total = 0;
-$totalQuantity = 0;
-
-foreach ($productDetails as $product) {
-    $price = ($product['tipo_compra'] === 'contado') ? $product['precio_contado'] : $product['precio_credito'];
-
-    $messageBody .= "• *Producto*: " . htmlspecialchars($product['nombre_producto'], ENT_QUOTES, 'UTF-8') . "\n";
-    $messageBody .= "   - *Cantidad*: " . htmlspecialchars($product['cantidad'], ENT_QUOTES, 'UTF-8') . "\n";
-    $messageBody .= "   - *Tipo de Compra*: " . ucfirst($product['tipo_compra']) . "\n";
-    $messageBody .= "   - *Precio Unitario*: $" . number_format($price, 2) . "\n";
-    $messageBody .= "   - *Subtotal*: $" . number_format($product['subtotal'], 2) . "\n\n";
-
-    $total += $product['subtotal'];
-    $totalQuantity += $product['cantidad'];
-}
-
-$messageBody .= "*Resumen de la Compra*\n";
-$messageBody .= "• *Total*: $" . number_format($total, 2) . "\n";
-$messageBody .= "• *Total de Productos*: " . $totalQuantity . "\n";
-
-// Codificar el mensaje para URL
-$messageBody = urlencode($messageBody);
-
-// Crear el enlace de WhatsApp
-$whatsappNumber = '+573182925046'; // Número en formato internacional
-$whatsappMessage = "https://wa.me/{$whatsappNumber}?text=" . $messageBody;
-
 ?>
 
 <!DOCTYPE html>
@@ -154,94 +48,78 @@ $whatsappMessage = "https://wa.me/{$whatsappNumber}?text=" . $messageBody;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmación de Compra</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #28a745;
-            font-size: 1.75rem;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        h2 {
-            color: #333;
-            margin-top: 20px;
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-        p {
-            margin: 10px 0;
-        }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px 0;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            text-align: center;
-            color: #fff;
-            background-color: #28a745;
-        }
-        .btn:hover {
-            background-color: #218838;
-        }
-        .info {
-            background-color: #e9ecef;
-            border-radius: 5px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-        .info p {
-            margin: 5px 0;
-        }
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-                margin: 10px;
-            }
-            h1 {
-                font-size: 1.5rem;
-            }
-            h2 {
-                font-size: 1.25rem;
-            }
-            .btn {
-                font-size: 0.875rem;
-                padding: 8px 16px;
-            }
-        }
-    </style>
+    <title>Información del Vehículo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/vehicle_info.css">
 </head>
-<body>
-    <a href="index.php">Volver</a>
-    <div class="container">
-        <h1>Compra Confirmada</h1>
-        <p>Tu compra ha sido confirmada con éxito. Puedes contactar al representante para completar el pago utilizando el siguiente enlace:</p>
-        <p style="text-align: center;">
-            <a href="<?= $whatsappMessage ?>" class="btn" target="_blank">Contactar por WhatsApp</a>
-        </p>
+<body class="bg-gray-100 text-gray-900">
+    <?php include '../reutils/navbar.php' ?>
 
-        <div class="info">
-            <h2>Detalles de la Compra</h2>
-            <p><strong>Nombre:</strong> <?= htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') ?></p>
-            <p><strong>Total de Productos:</strong> <?= $totalQuantity ?></p>
-            <p><strong>Total a Pagar:</strong> $<?= number_format($total, 2) ?></p>
+    <div class="ml-64 p-6 w-screen">
+        <?php include '../reutils/navbar-user.php'?>
+        <h2 class="text-3xl font-semibold my-6 mx-4">Información del Vehículo</h2>
+
+        <div class="vehicle-card bg-white rounded-lg shadow-md">
+            <article class="vehicle-info">
+                <img src="../../images/<?= $vehicleInfo['tipo_vehiculo'] == 'carro' ? 'car-solid.svg' : 'motorcycle-solid.svg' ?>" alt="car">
+                <div class="info-group">
+                    <span class="title">Placa</span>
+                    <span class="desc id"><?= $vehicleInfo['placa'] ?></span>
+                </div>
+                <div class="info-group">
+                    <span class="title">Marca</span>
+                    <span class="desc"><?= $vehicleInfo['marca'] ?></span>
+                </div>
+                <div class="info-group">
+                    <span class="title">Modelo</span>
+                    <span class="desc"><?= $vehicleInfo['modelo'] ?></span>
+                </div>
+                <div class="info-group">
+                    <span class="title">Año</span>
+                    <span class="desc"><?= $vehicleInfo['ano'] ?></span>
+                </div>
+                <div class="mt-4">
+                    <a href="editar_vehiculo.php?placa=<?= urlencode($vehicleInfo['placa']) ?>" class="edit">Editar Vehículo</a>
+                </div>
+            </article>
+            <article class="payment-actions-container">
+                <form method="post" class="btns-payment-actions">
+                    <button class="play">Iniciar Contador</button>
+                    <button class="stop" name="calculate">Calcular Pago</button>
+                    <input class="time" type="text" value="00:00:00">
+                    <input class="time2" type="hidden" name="time">
+                </form>
+                <h3 class="text-xl font-semibold mx-6">Pagos Recientes</h3>
+                <table class="payments-table">
+                    <thead>
+                        <tr>
+                            <th>ID pago</th>
+                            <th>Tarifa</th>
+                            <th>Tiempo <span class="mini">(en horas)</span></th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                            if (is_string($paymentInfo)) echo '<tr><td class="no-payment" colspan="4">No hay pagos registrados</td></tr>';
+                            if (!is_string($paymentInfo)) {
+                                while ($payment = mysqli_fetch_assoc($paymentInfo)) {?>
+                                    <tr>
+                                        <td><?= $payment['id_pago'] ?></td>
+                                        <td>$<span class="tarifa"><?= $payment['tarifa'] ?></span></td>
+                                        <td><?= $payment['tiempo'] ?></td>
+                                        <td><strong>$<span class="total"><?= $payment['total'] ?></strong></span></td>
+                                    </tr>
+                                <?php
+                                }
+                            }
+                        ?>
+                    </tbody>
+                </table>
+            </article>
         </div>
     </div>
+    <script src="../../JS/currencyFormat.js"></script>
+    <script src="../../JS/timeCounter.js"></script>
 </body>
 </html>

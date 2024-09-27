@@ -1,0 +1,156 @@
+:root{
+    --icon-bg: #1E40AF;
+    --card-bg: #34445a;
+}
+
+.vehicle-card{
+    display: grid;
+    grid-template-columns: 2fr 5fr;
+    gap: 1em;
+    padding: 2em;
+}
+
+.vehicle-card .vehicle-info{
+    background-color: #f6f6f6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6em;
+    padding: 0.8em;
+    border-radius: 0.2em;
+    box-shadow: 0.3em 0.3em 0.5em #aaaaaa88;
+    border: 2px solid #eeeeee;
+}
+
+.vehicle-card .vehicle-info img{
+    width: 5em;
+    height: 5em;
+    border: 2px solid #ffffff;
+    padding: 0.6em;
+    border-radius: 50%;
+    background-color: var(--icon-bg);
+    box-shadow: 0 0 0.5em #aaaaaa77;
+}
+
+.vehicle-card .vehicle-info .info-group{
+    border: 1px solid #dddddd;
+    background-color: #f0f0f0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0.65em 0.8em;
+    color: var(--card-bg);
+}
+
+.vehicle-card .vehicle-info .info-group .title{
+    font-weight: 600;
+    display: block;
+    border-right: 1px solid #dddddd;
+}
+
+.vehicle-card .vehicle-info .info-group .desc{
+    display: block;
+    padding-left: 0.4em;
+}
+
+.vehicle-card .vehicle-info .edit{
+    display: block;
+    padding: 0.5em 1em;
+    border: 2px solid var(--icon-bg);
+    color: var(--icon-bg);
+    transition: .2s;
+}
+
+.vehicle-card .vehicle-info .edit:hover{
+    background-color: var(--icon-bg);
+    color: #f6f6f6;
+}
+
+.payment-actions-container{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.payment-actions-container .btns-payment-actions{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 3em;
+    padding: 0 0.5em;
+}
+
+.payment-actions-container .btns-payment-actions button{
+    border: 2px solid var(--icon-bg);
+    padding: 0.5em 1em;
+    border-radius: 0.2em;
+    transition: .2s;
+}
+
+.payment-actions-container .btns-payment-actions .play{
+    color: #f8f8f8;
+    background-color: var(--icon-bg);
+}
+
+.payment-actions-container .btns-payment-actions .play:hover{
+    transform: translateY(-0.2em);
+}
+
+.payment-actions-container .btns-payment-actions .stop{
+    color: var(--icon-bg);
+}
+
+.payment-actions-container .btns-payment-actions .stop:hover{
+    background-color: var(--icon-bg);
+    color: #f8f8f8;
+}
+
+.payment-actions-container .btns-payment-actions .time{
+    border: none;
+    text-align: right;
+    font-size: 1.05;
+    width: 6em;
+    font-weight: 500;
+}
+
+.payment-actions-container .payments-table{
+    border: 1px solid #dddddd;
+}
+
+.payment-actions-container .payments-table thead{
+    border-bottom: 1px solid #dddddd;
+}
+
+.payment-actions-container .payments-table thead tr{
+    background-color: #f6f6f6;
+}
+
+.payment-actions-container .payments-table thead tr th{
+    padding: 0.3em 0;
+}
+
+.payment-actions-container .payments-table thead tr th .mini{
+    font-size: 0.7em;
+    color: #cccccc;
+    font-weight: 500;
+}
+
+.payment-actions-container .payments-table tbody tr:nth-child(odd){
+    background-color: #fafafa;
+}
+
+.payment-actions-container .payments-table tbody tr:nth-child(even){
+    background-color: #f0f0f0;
+}
+
+.payment-actions-container .payments-table tbody tr td{
+    padding: 0.2em 0;
+    text-align: center;
+}
+
+.payment-actions-container .payments-table tbody tr .no-payment{
+    padding: 0.5em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #00000077;
+}
