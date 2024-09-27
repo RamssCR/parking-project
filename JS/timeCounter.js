@@ -21,10 +21,11 @@ function stop_counter(id) {
 
     if (startTime) {
         const endTime = new Date().getTime()
-        const elapsedTime = (endTime - startTime) / 1000 / 36000
+        const elapsedTime = (endTime - startTime) / 1000 / 3600
 
         localStorage.removeItem(key)
         time2.value = Math.floor(elapsedTime)
+        console.log(elapsedTime)
     }
 }
 
@@ -60,6 +61,7 @@ play.addEventListener('click', (e) => {
 })
 
 stop.addEventListener('click', (e) => {
+    e.preventDefault()
     clearInterval()
     stop_counter(id)
 })
