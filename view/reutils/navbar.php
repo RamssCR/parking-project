@@ -14,11 +14,20 @@
     <div id="sidebar" class="p-4">
         <h2 class="text-xl font-semibold mb-6">Menú</h2>
         <ul>
-            <li><a href="admin.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Lista de Empleados</a></li>
-            <li><a href="empleado.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Lista de Clientes</a></li>
-            <li><a href="crear_empleado.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Crear Empleado</a></li>
-            <li><a href="crear_cliente.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Crear Cliente</a></li>
-            
+            <?php
+                if ($user['tipo_usuario'] == 'Admin') { ?>
+                    <li><a href="admin.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Lista de Empleados</a></li>
+                    <li><a href="crear_empleado.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Crear Empleado</a></li>
+                    <?php
+                }
+                ?>
+            <?php
+                if ($user['tipo_usuario'] == 'Empleado') { ?>
+                    <li><a href="empleado.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Lista de Clientes</a></li>
+                    <li><a href="crear_cliente.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Crear Cliente</a></li>
+                <?php
+                }
+            ?>
         </ul>
     </div>
 </body>
