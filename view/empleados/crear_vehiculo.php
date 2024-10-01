@@ -59,7 +59,7 @@
             </div>
 
             <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto">
-                <h2 class="text-2xl font-semibold mb-4 text-center">Crear vehiculo</h2>
+                <h2 class="text-2xl font-semibold mb-4 text-center changer">Crear vehiculo</h2>
                 <form method="post" class="space-y-4">
                     <div class="flex flex-col">
                         <label for="document" class="text-gray-700">Placa</label>
@@ -88,6 +88,9 @@
     </div>
 
     <script>
+        const bgImage = localStorage.getItem('background')
+        if (bgImage) document.body.style.backgroundImage = `url(../../images/background/${bgImage})`
+
         document.addEventListener('DOMContentLoaded',() => {
             const statusMessage = document.getElementById('status-message');
             if (statusMessage && statusMessage.classList.contains('hidden') === false) {

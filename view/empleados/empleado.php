@@ -52,7 +52,7 @@
             <div id="status-message" class="mb-4 px-4 py-2 rounded-lg hidden"></div>
 
             <div class="flex justify-between items-center">
-                <h2 class="text-3xl font-semibold">Lista de Clientes</h2>
+                <h2 class="text-3xl font-semibold changer">Lista de Clientes</h2>
             </div>
 
             <div class="mt-6 bg-white shadow-md rounded-lg overflow-hidden">
@@ -76,6 +76,12 @@
     </div>
 
     <script>
+        const bgImage = localStorage.getItem('background')
+        if (bgImage) {
+            document.body.style.backgroundImage = `url(../../images/background/${bgImage})`
+            document.querySelectorAll('.changer').forEach(title => bgImage.includes("8") ? title.style.color = "#f6f6f6" : title.style.color = "#222222")
+        }
+    
         const registers = document.querySelector('#inventory-body')
 
         if (registers.childElementCount === 0) {

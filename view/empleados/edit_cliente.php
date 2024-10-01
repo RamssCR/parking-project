@@ -58,7 +58,7 @@ if (isset($_POST['send'])){
             </div>
 
             <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto">
-                <h2 class="text-2xl font-semibold mb-4 text-center">Crear Empleado</h2>
+                <h2 class="text-2xl font-semibold mb-4 text-center changer">Crear Empleado</h2>
                 <form method="post" class="space-y-4">
                     <div class="flex flex-col">
                         <label for="document" class="text-gray-700">Documento</label>
@@ -94,6 +94,9 @@ if (isset($_POST['send'])){
     </div>
 
     <script>
+        const bgImage = localStorage.getItem('background')
+        if (bgImage) document.body.style.backgroundImage = `url(../../images/background/${bgImage})`
+
         document.addEventListener('DOMContentLoaded',() => {
             const statusMessage = document.getElementById('status-message');
             if (statusMessage && statusMessage.classList.contains('hidden') === false) {

@@ -57,7 +57,7 @@ if (isset($_GET['placa'])) {
 
     <div class="ml-64 p-6 w-screen">
         <?php include '../reutils/navbar-user.php'?>
-        <h2 class="text-3xl font-semibold my-6 mx-4">Información del Vehículo</h2>
+        <h2 class="text-3xl font-semibold my-6 mx-4 changer">Información del Vehículo</h2>
 
         <div class="vehicle-card bg-white rounded-lg shadow-md">
             <article class="vehicle-info">
@@ -119,6 +119,13 @@ if (isset($_GET['placa'])) {
             </article>
         </div>
     </div>
+    <script>
+        const bgImage = localStorage.getItem('background')
+        if (bgImage) {
+            document.body.style.backgroundImage = `url(../../images/background/${bgImage})`
+            document.querySelectorAll('.changer').forEach(title => bgImage.includes("8") ? title.style.color = "#f6f6f6" : title.style.color = "#222222")
+        }
+    </script>
     <script src="../../JS/currencyFormat.js"></script>
     <script src="../../JS/timeCounter.js"></script>
 </body>

@@ -39,7 +39,7 @@ if (isset($_GET['id_cliente'])) {
         <?php include '../reutils/navbar-user.php'?>
 
         <main class="mt-10 px-5">
-            <h2 class="text-3xl font-semibold mb-4 pl-4">Información del Cliente</h2>
+            <h2 class="text-3xl font-semibold mb-4 pl-4 changer">Información del Cliente</h2>
             <div class="customer-container">
                 <img src="../../images/blank-avatar.webp" alt="customer" class="customer-logo">
                 <h2 class="text-xl font-semibold mb-4"><?= htmlspecialchars($showCustomer['nombre']) ?></h2>
@@ -71,7 +71,7 @@ if (isset($_GET['id_cliente'])) {
                 </div>
             </div>
             <div class="to-register px-4">
-                <h2 class="text-2xl font-semibold my-4">Vehículos registrados</h2>
+                <h2 class="text-2xl font-semibold my-4 changer">Vehículos registrados</h2>
                 <a href="crear_vehiculo.php?id_customer=<?= $showCustomer['id_cliente'] ?>"><span class="add">+</span></a>
             </div>
             <section class="all-vehicles px-4">
@@ -117,6 +117,13 @@ if (isset($_GET['id_cliente'])) {
         </main>
     </div>
 
+    <script>
+        const bgImage = localStorage.getItem('background')
+        if (bgImage) {
+            document.body.style.backgroundImage = `url(../../images/background/${bgImage})`
+            document.querySelectorAll('.changer').forEach(title => bgImage.includes("8") ? title.style.color = "#f6f6f6" : title.style.color = "#222222")
+        }
+    </script>
     <script src="../../JS/displayEdit.js"></script>
 </body>
 </html>
