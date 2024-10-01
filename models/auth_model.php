@@ -20,7 +20,13 @@ class AuthModel {
         $matchedUser = mysqli_fetch_assoc($query);
         if (!password_verify($this->password, $matchedUser['password'])) return false;
 
-        return $matchedUser;
+        $requestedUser = mysqli_execute_query($this->connection, 
+            'SELECT admin.id, admin.nombre, admin.email, admin.telefono, admin.documento, usuarios.tipo_usuario, usuarios.pic_user FROM admin, usuarios WHERE admin.email = ? AND usuarios.email = ?
+            UNION
+            SELECT empleados.id, empleados.nombre, empleados.email, empleados.telefono, empleados.documento, usuarios.tipo_usuario, usuarios.pic_user FROM empleados, usuarios WHERE empleados.email = ? AND usuarios.email = ?',
+            [$this->email, $this->email, $this->email, $this->email]
+        );
+        return mysqli_fetch_assoc($requestedUser);
     }
 }
 
