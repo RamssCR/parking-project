@@ -20,7 +20,7 @@
                 </div>
                 <div class="flex flex-col">
                     <h1 class="text-2xl text-white font-bold ml-4">PARKING PENTA</h1>
-                    <h1 class="text-xl font-bold ml-4" style="color: #EEEEEE; text-transform: uppercase"><?=$user['nombre_usuario']?></h1>
+                    <h1 class="text-xl font-bold ml-4" style="color: #EEEEEE; text-transform: uppercase"><?=$user['nombre']?></h1>
                 </div>
             </div>
             <form method="post">
