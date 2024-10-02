@@ -52,7 +52,7 @@
             <div id="status-message" class="mb-4 px-4 py-2 rounded-lg hidden"></div>
 
             <div class="flex justify-between items-center">
-                <h2 class="text-3xl font-semibold">Lista de Empleados</h2>
+                <h2 class="text-3xl font-semibold changer">Lista de Empleados</h2>
             </div>
 
             <div class="mt-6 bg-white shadow-md rounded-lg overflow-hidden">
