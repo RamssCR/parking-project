@@ -21,6 +21,6 @@ images.forEach(img => {
         localStorage.setItem('background', `background-${e.target.id}.jpg`)
         e.target.id === '8' ? title.style.color = "#f6f6f6" : title.style.color = "#333333"
 
-        if (bgImage) document.body.style.backgroundImage = `url(../../images/background/background-${e.target.id}.jpg)`
+        document.body.style.backgroundImage = `url(../../images/background/background-${e.target.id}.jpg)`
     })
 })
