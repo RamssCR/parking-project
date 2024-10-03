@@ -1,12 +1,18 @@
 <?php
 session_start();
 require_once('../../models/validators/login_validation.php');
+require_once('../../controllers/parking_controller.php');
 
 validateLogin();
 $user = $_SESSION['user'];
-$user_pfp = '../../images/' . $user['pic_user'];
 
 if (!isset($_GET['id_employee'])) $user['tipo_usuario'] == 'admin' ? header('location: ../admins/admin.php') : header('empleado.php');
+if (isset($_POST['change'])) {
+    $request = new EmployeeController();
+    if ($_FILES['pfp']){
+        $changePFP = $request->change_profile_picture($user['email'], $user['documento'], $_FILES['pfp']);
+    }
+}
 
 ?>
 
@@ -26,6 +32,9 @@ if (!isset($_GET['id_employee'])) $user['tipo_usuario'] == 'admin' ? header('loc
         <?php include '../reutils/navbar-user.php'?>
         
         <main class="mt-10 px-5">
+            <div id="status-message" class="mb-4 px-4 py-2 rounded-lg <?php echo isset($changePFP) && str_contains($changePFP, 'exitosamente') ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'; ?> <?php echo !isset($changePFP) ? 'hidden' : ''; ?>">
+                <?php echo isset($changePFP) ? $changePFP : ''; ?>
+            </div>
             <h2 class="text-3xl font-semibold mb-10 pl-4 changer">Información del Empleado</h2>
             <section class="profile-container-all">
                 <article class="profile-card">
@@ -51,7 +60,7 @@ if (!isset($_GET['id_employee'])) $user['tipo_usuario'] == 'admin' ? header('loc
                         </div>
                     </div>
                     <h3 class="text-2xl font-semibold mt-10 mb-6">Configuración de la Cuenta</h3>
-                    <form method="post" class="profile-pic-form">
+                    <form method="post" class="profile-pic-form" enctype="multipart/form-data">
                         <label for="pfp">Cambiar Foto de Perfil</label>
                         <div class="input-group">
                             <input type="file" name="pfp" id="pfp" />

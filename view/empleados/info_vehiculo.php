@@ -8,8 +8,6 @@ require_once('../../controllers/payment_controller.php');
 validateLogin();
 
 $user = $_SESSION['user'];
-$user_pfp = '../../images/' . $user['pic_user'];
-
 
 if (isset($_GET['placa'])) {
     $placa = $_GET['placa'];

@@ -9,7 +9,6 @@
 
     validateLogin();
     $user = $_SESSION['user'];
-    $user_pfp = '../../images/' . $user['pic_user'];
 
     if (isset($_GET['id_customer'])) {
         $customer = $_GET['id_customer'];

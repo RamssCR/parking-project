@@ -7,7 +7,6 @@
 
     validateLogin();
     $user = $_SESSION['user'];
-    $user_pfp = '../../images/' . $user['pic_user'];
 
     if (isset($_POST['send'])){
         

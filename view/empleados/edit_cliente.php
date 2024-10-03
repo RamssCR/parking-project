@@ -7,7 +7,6 @@ require_once('../../connection.php');
 
 validateLogin();
 $user = $_SESSION['user'];
-$user_pfp = '../../images/' . $user['pic_user'];
 
 $request = new CustomerController();
 if (isset($_GET['id_cliente'])) {

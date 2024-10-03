@@ -5,7 +5,6 @@
 
     validateLogin();
     $user = $_SESSION['user'];
-    $user_pfp = '../../images/' . $user['pic_user'];
 ?>
 
 <!DOCTYPE html>
