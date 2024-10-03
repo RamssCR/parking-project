@@ -1,6 +1,8 @@
 <?php 
     require_once '../../models/validators/login_validation.php';
     if (isset($_POST['logout'])) logout();
+
+    $user_pfp = $user['pic_user'] == 'blank-avatar.webp' ? '../../images/' . $user['pic_user'] : '../../uploads/' . $user['pic_user'];
 ?>
 
 
