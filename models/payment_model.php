@@ -1,9 +1,13 @@
 <?php
+require_once('../../controllers/service_controller.php');
+
 class PaymentModel{
     private $connection;
+    private $trigger;
 
     public function __construct() {
         $this->connection = mysqli_connect('localhost', 'root', '', 'dbpenta');
+        $this->trigger = new ServiceController();
     }
 
     // Fetch all payments of a single vehicle
@@ -25,7 +29,20 @@ class PaymentModel{
         );
 
         if (!$insertPayment) return false;
-        return true;
+
+        // Expansion
+
+        // Validating if the customer matches the required average to acquire services
+        $fetchedAVG = mysqli_execute_query($this->connection, 'SELECT AVG(total) FROM pago WHERE id_vehiculo = ?', [$payment['id_vehicle']]);
+        $calculatedAVG = $fetchedAVG->fetch_row()[0];
+
+        // Fetching customer ID
+        $fetchedCustomer = mysqli_execute_query($this->connection, 'SELECT * FROM vehiculos WHERE id_vehiculo = ?', [$payment['id_vehicle']]);
+        $id_customer = $fetchedCustomer->fetch_assoc()['id_cliente'];
+
+        if ($calculatedAVG < 30000) return $this->trigger->disable_services($id_customer);
+
+        return $this->trigger->add_services($id_customer);
     }
 
     // Modify a payment

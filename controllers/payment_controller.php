@@ -27,7 +27,7 @@ class PaymentController{
     // Create a payment
     public function create_payment($payment) {
         $insertPayment = $this->model->create_payment($payment);
-        return !$insertPayment ? 'Hubo un error al crear el pago' : 'Pago creado exitosamente';
+        return $insertPayment;
     }
 
     // Modify a payment
