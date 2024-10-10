@@ -3,9 +3,9 @@ session_start();
 
 require_once('../../controllers/customer_controller.php');
 require_once('../../controllers/service_controller.php');
+require_once('../../controllers/locker_controller.php');
 require_once('../../models/validators/login_validation.php');
 require_once('../../controllers/vehicle_controller.php');
-require_once('../../connection.php');
 
 validateLogin();
 $user = $_SESSION['user'];
@@ -13,14 +13,29 @@ $user = $_SESSION['user'];
 if (isset($_GET['id_cliente'])) {
     $id = $_GET['id_cliente'];
 
-    $request = new CustomerController();
+    $customer_request = new CustomerController();
     $vehicle_request = new VehicleController();
     $service_request = new ServiceController();
+    $locker_request = new LockerController();
 
-    $showCustomer = $request->show_customer($id);
+    $showCustomer = $customer_request->show_customer($id);
+    
     $countedCars = $vehicle_request->countAll_vehicles_customer($id);
     $countedServices = $service_request->showAll_customer_services($id);
     $showAll_vehicles = $vehicle_request->showAll_vehicles_customer($id);
+
+    $showAll_available_lockers = $locker_request->getAll_available_lockers();
+    $show_customer_locker = $locker_request->get_customer_locker($id);
+
+    if (isset($_POST['assign'])) {
+        $locker = [
+            'id_customer' => $id,
+            'id_locker' => $_POST['locker']
+        ];
+
+        $assignLocker = $locker_request->assignLocker($locker);
+        if (str_contains($assignLocker, 'exitosamente')) header('location: cliente_info.php?id_cliente='.$id);
+    }
 }
 ?>
 
@@ -75,14 +90,22 @@ if (isset($_GET['id_cliente'])) {
                         <span class="info-data"><?= $countedServices ?></span>
                     </div>
                     <div class="info-card">
-                        <span class="info-title font-semibold">Locker Asignado</span>
-                        <span class="info-data">Ninguno</span>
+                        <span class="info-title font-semibold">Casillero Asignado</span>
+                        <span class="info-data"><?= $show_customer_locker ?></span>
                     </div>
                 </div>
             </div>
             <div class="to-register px-4">
                 <h2 class="text-2xl font-semibold my-4 changer">Vehículos registrados</h2>
-                <a href="crear_vehiculo.php?id_customer=<?= $showCustomer['id_cliente'] ?>"><span class="add">+</span></a>
+                <div class="btns-create">
+                    <a href="crear_vehiculo.php?id_customer=<?= $showCustomer['id_cliente'] ?>"><span class="add">+</span></a>
+                    <?php
+                        if ($countedServices == 2) { ?>
+                            <button class="activate_modal"><span class="add">+</span></button>
+                            <?php
+                        }
+                    ?>
+                </div>
             </div>
             <section class="all-vehicles px-4">
                 <?php
@@ -125,6 +148,38 @@ if (isset($_GET['id_cliente'])) {
                 ?>
             </section>
         </main>
+        <?php
+            if ($countedServices == 2) { ?>
+                <section class="modal">
+                    <span class="quit">X</span>
+                    <form method="post" class="locker-form">
+                        <h2 class="form-title">Agregar nuevo casillero</h2>
+                        <?php
+                            if (isset($assignLocker)) { ?>
+                                <span class="form-error"><?= $assignLocker ?></span>
+                            <?php
+                            }
+                        ?>
+                        <div class="input-group">
+                            <label for="locker">Casillero</label>
+                            <select name="locker" id="locker">
+                                <option value="">-- Seleccione Casillero --</option>
+                                <?php
+                                    while ($available_lockers = mysqli_fetch_assoc($showAll_available_lockers)) { ?>
+                                        <option value="<?= $available_lockers['id_locker'] ?>"><?= $available_lockers['codigo_locker'] ?></option>
+                                    <?php
+                                    }
+                                ?>
+                            </select>
+                        </div>
+
+                        <input type="submit" name="assign" value="Asignar">
+                    </form>
+                </section>
+            <?php
+            }
+
+        ?>
     </div>
 
     <script>
@@ -135,5 +190,6 @@ if (isset($_GET['id_cliente'])) {
         }
     </script>
     <script src="../../JS/displayEdit.js"></script>
+    <script src="../../JS/displayLockerForm.js"></script>
 </body>
 </html>
