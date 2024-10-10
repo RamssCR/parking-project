@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-10-2024 a las 16:53:56
+-- Tiempo de generación: 10-10-2024 a las 22:18:43
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -101,54 +101,55 @@ INSERT INTO `empleados` (`id`, `documento`, `nombre`, `email`, `telefono`) VALUE
 
 CREATE TABLE `lockers` (
   `id_locker` int(11) NOT NULL,
-  `codigo_locker` tinytext NOT NULL
+  `codigo_locker` tinytext NOT NULL,
+  `asignado` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `lockers`
 --
 
-INSERT INTO `lockers` (`id_locker`, `codigo_locker`) VALUES
-(1, 'A01'),
-(2, 'A02'),
-(3, 'A03'),
-(4, 'A04'),
-(5, 'A05'),
-(6, 'A06'),
-(7, 'A07'),
-(8, 'A08'),
-(9, 'A09'),
-(10, 'A10'),
-(11, 'A11'),
-(12, 'A12'),
-(13, 'A13'),
-(14, 'A14'),
-(15, 'A15'),
-(16, 'A16'),
-(17, 'A17'),
-(18, 'A18'),
-(19, 'A19'),
-(20, 'A20'),
-(21, 'B01'),
-(22, 'B02'),
-(23, 'B03'),
-(24, 'B04'),
-(25, 'B05'),
-(26, 'B06'),
-(27, 'B07'),
-(28, 'B08'),
-(29, 'B09'),
-(30, 'B10'),
-(31, 'B11'),
-(32, 'B12'),
-(33, 'B13'),
-(34, 'B14'),
-(35, 'B15'),
-(36, 'B16'),
-(37, 'B17'),
-(38, 'B18'),
-(39, 'B19'),
-(40, 'B20');
+INSERT INTO `lockers` (`id_locker`, `codigo_locker`, `asignado`) VALUES
+(1, 'A01', 1),
+(2, 'A02', 1),
+(3, 'A03', 0),
+(4, 'A04', 0),
+(5, 'A05', 0),
+(6, 'A06', 0),
+(7, 'A07', 0),
+(8, 'A08', 0),
+(9, 'A09', 0),
+(10, 'A10', 0),
+(11, 'A11', 0),
+(12, 'A12', 0),
+(13, 'A13', 0),
+(14, 'A14', 0),
+(15, 'A15', 0),
+(16, 'A16', 0),
+(17, 'A17', 0),
+(18, 'A18', 0),
+(19, 'A19', 0),
+(20, 'A20', 0),
+(21, 'B01', 1),
+(22, 'B02', 0),
+(23, 'B03', 0),
+(24, 'B04', 0),
+(25, 'B05', 0),
+(26, 'B06', 0),
+(27, 'B07', 0),
+(28, 'B08', 0),
+(29, 'B09', 0),
+(30, 'B10', 0),
+(31, 'B11', 0),
+(32, 'B12', 0),
+(33, 'B13', 0),
+(34, 'B14', 0),
+(35, 'B15', 0),
+(36, 'B16', 0),
+(37, 'B17', 0),
+(38, 'B18', 0),
+(39, 'B19', 0),
+(40, 'B20', 0);
 
 -- --------------------------------------------------------
 
@@ -159,9 +160,17 @@ INSERT INTO `lockers` (`id_locker`, `codigo_locker`) VALUES
 CREATE TABLE `locker_cliente` (
   `id_cliente_locker` int(11) NOT NULL,
   `id_cliente` int(11) NOT NULL,
-  `id_locker` int(11) NOT NULL,
-  `asignado` tinyint(4) NOT NULL DEFAULT 0
+  `id_locker` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `locker_cliente`
+--
+
+INSERT INTO `locker_cliente` (`id_cliente_locker`, `id_cliente`, `id_locker`) VALUES
+(1, 1, 1),
+(2, 2, 21),
+(4, 4, 2);
 
 -- --------------------------------------------------------
 
@@ -197,8 +206,8 @@ INSERT INTO `pago` (`id_pago`, `total`, `tiempo`, `tarifa`, `deshabilitado`, `id
 (26, 1890000, 126, 15000, 0, 4),
 (27, 2520000, 126, 20000, 0, 6),
 (28, 2520000, 126, 20000, 0, 7),
-(29, 15000, 1, 15000, 0, 9),
-(30, 15000, 1, 15000, 0, 9);
+(29, 150000, 10, 15000, 0, 9),
+(37, 15000, 1, 15000, 0, 9);
 
 -- --------------------------------------------------------
 
@@ -221,7 +230,9 @@ INSERT INTO `servicios` (`id_cliente_servicio`, `nombre_servicio`, `id_cliente_f
 (3, 'Locker', 2, 1),
 (4, 'Autolavado', 2, 1),
 (5, 'Locker', 1, 1),
-(6, 'Autolavado', 1, 1);
+(6, 'Autolavado', 1, 1),
+(7, 'Locker', 4, 1),
+(8, 'Autolavado', 4, 1);
 
 -- --------------------------------------------------------
 
@@ -383,19 +394,19 @@ ALTER TABLE `lockers`
 -- AUTO_INCREMENT de la tabla `locker_cliente`
 --
 ALTER TABLE `locker_cliente`
-  MODIFY `id_cliente_locker` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_cliente_locker` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `pago`
 --
 ALTER TABLE `pago`
-  MODIFY `id_pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id_pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `servicios`
 --
 ALTER TABLE `servicios`
-  MODIFY `id_cliente_servicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_cliente_servicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
