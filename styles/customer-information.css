@@ -4,6 +4,7 @@
     --underline-color: #D1D5DB;
     --card-bg: #1E40AF;
     --text-color: #374151;
+    --btn-new-bgColor: #1F2937;
 }
 
 * {
@@ -57,7 +58,7 @@ main {
 
 .customer-container .customer-info-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     border-bottom: 1px solid var(--underline-color);
     padding: 1em;
     gap: 1em;
@@ -102,7 +103,34 @@ main {
     box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 
-.to-register a .add{
+.to-register .btns-create{
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+}
+
+
+.to-register .btns-create .activate_modal{
+    width: 2em;
+    height: 2em;
+    font-size: 2.5em;
+    border-radius: 50%;
+    color: var(--customer-container-bg);
+    background-color: var(--btn-new-bgColor);
+    font-weight: 700;
+    transition: .3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.to-register .btns-create .activate_modal:hover {
+    transform: rotate(90deg);
+    filter: brightness(120%);
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+}
+
+.to-register .add{
     margin-top: -0.2em;
 }
 
@@ -217,14 +245,147 @@ main {
     transform: translateX(-50%);
 }
 
+.modal{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #00000066;
+    top: 0;
+    left: 0;
+    display: none;
+    animation: fadeIn .15s linear;
+}
+
+@keyframes fadeIn {
+    0%{
+        opacity: 0;
+    }
+
+    100%{
+        opacity: 1;
+    }
+}
+
+.modal .quit{
+    color: #fcfcfc;
+    font-size: 2em;
+    position: absolute;
+    font-weight: 700;
+    top: 0.2em;
+    right: 0.6em;
+}
+
+.modal .quit:hover{
+    color: #e71414;
+    cursor: pointer;
+}
+
+.modal .locker-form{
+    background-color: var(--customer-container-bg);
+    padding: 1em 4em;
+    border-radius: 0.4em;
+    box-shadow: 0 0 0.5em #333333;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+    width: 45em;
+    align-items: center;
+    animation: popup .3s linear;
+}
+
+@keyframes popup {
+    0%{
+        transform: scale(0);
+    }
+
+    50%{
+        transform: scale(0);
+    }
+
+    80%{
+        transform: scale(1.1);
+    }
+
+    95%{
+        transform: scale(1);
+    }
+}
+
+.modal .locker-form .form-title{
+    text-transform: uppercase;
+    font-size: 2em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.modal .locker-form .form-error{
+    display: block;
+    color: #e71414;
+    font-weight: 500;
+    padding: 0.5em;
+    width: 30em;
+    background-color: #ffe6e6;
+    border-radius: 0.4em;
+    text-align: center;
+}
+
+.modal .locker-form .input-group{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.4em;
+}
+
+.modal .locker-form .input-group label{
+    font-weight: 500;
+}
+
+.modal .locker-form .input-group select{
+    padding: 0.5em 0.8em;
+    border: 1px solid #dddddd;
+    border-radius: 0.23em;
+    font-size: 1.05em;
+    color: #333333;
+}
+
+.modal .locker-form input[type="submit"]{
+    background-color: transparent;
+    border: 2px solid var(--card-bg);
+    color: var(--card-bg);
+    font-weight: 600;
+    padding: 0.6em 1em;
+    border-radius: 0.2em;
+    transition: .2s;
+    text-transform: uppercase;
+}
+
+.modal .locker-form input[type="submit"]:hover{
+    background-color: var(--card-bg);
+    color: var(--border-color);
+    box-shadow: 0 0 0.2em var(--card-bg);
+    cursor: pointer;
+}
+
+
 @media only screen and (width < 1115px) {
     .customer-container .customer-info-container{
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .modal .locker-form{
+        width: 40em;
     }
 }
 
 @media only screen and (width < 900px) {
     .customer-container .customer-info-container{
         grid-template-columns: repeat(1, 1fr);
+    }
+
+    .modal .locker-form{
+        width: 30em;
     }
 }
