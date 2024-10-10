@@ -1,13 +1,16 @@
 <?php
 require_once('../../controllers/service_controller.php');
+require_once('../../controllers/locker_controller.php');
 
 class PaymentModel{
     private $connection;
     private $trigger;
+    private $lockerTrigger;
 
     public function __construct() {
         $this->connection = mysqli_connect('localhost', 'root', '', 'dbpenta');
         $this->trigger = new ServiceController();
+        $this->lockerTrigger = new LockerController();
     }
 
     // Fetch all payments of a single vehicle
@@ -40,7 +43,10 @@ class PaymentModel{
         $fetchedCustomer = mysqli_execute_query($this->connection, 'SELECT * FROM vehiculos WHERE id_vehiculo = ?', [$payment['id_vehicle']]);
         $id_customer = $fetchedCustomer->fetch_assoc()['id_cliente'];
 
-        if ($calculatedAVG < 30000) return $this->trigger->disable_services($id_customer);
+        if ($calculatedAVG < 30000) {
+            $this->lockerTrigger->removeLocker($id_customer);
+            return $this->trigger->disable_services($id_customer);
+        }
 
         return $this->trigger->add_services($id_customer);
     }
