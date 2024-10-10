@@ -57,7 +57,7 @@ main {
 
 .customer-container .customer-info-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     border-bottom: 1px solid var(--underline-color);
     padding: 1em;
     gap: 1em;

@@ -2,6 +2,7 @@
 session_start();
 
 require_once('../../controllers/customer_controller.php');
+require_once('../../controllers/service_controller.php');
 require_once('../../models/validators/login_validation.php');
 require_once('../../controllers/vehicle_controller.php');
 require_once('../../connection.php');
@@ -14,9 +15,11 @@ if (isset($_GET['id_cliente'])) {
 
     $request = new CustomerController();
     $vehicle_request = new VehicleController();
+    $service_request = new ServiceController();
 
     $showCustomer = $request->show_customer($id);
     $countedCars = $vehicle_request->countAll_vehicles_customer($id);
+    $countedServices = $service_request->showAll_customer_services($id);
     $showAll_vehicles = $vehicle_request->showAll_vehicles_customer($id);
 }
 ?>
@@ -66,6 +69,14 @@ if (isset($_GET['id_cliente'])) {
                     <div class="info-card">
                         <span class="info-title font-semibold">Vehículos Registrados</span>
                         <span class="info-data"><?= $countedCars > 0 ? $countedCars : 'Ninguno' ?></span>
+                    </div>
+                    <div class="info-card">
+                        <span class="info-title font-semibold">Servicios Activos</span>
+                        <span class="info-data"><?= $countedServices ?></span>
+                    </div>
+                    <div class="info-card">
+                        <span class="info-title font-semibold">Locker Asignado</span>
+                        <span class="info-data">Ninguno</span>
                     </div>
                 </div>
             </div>
