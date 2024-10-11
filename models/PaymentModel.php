@@ -20,7 +20,7 @@ class PaymentModel extends Connection{
     private $lockerTrigger;
 
     public function __construct() {
-        $this->connection = $this->makeConnection();
+        $this->connection = $this->make_connection();
         $this->trigger = new ServiceController();
         $this->lockerTrigger = new LockerController();
     }

@@ -18,7 +18,7 @@ class AuthModel extends Connection {
         $this->email = $email;
         $this->password = $password;
         $this->role = $role;
-        $this->connection = $this->makeConnection();
+        $this->connection = $this->make_connection();
     }
 
     public function login() : array | bool {

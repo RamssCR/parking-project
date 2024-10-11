@@ -6,7 +6,7 @@ abstract class Connection {
 
     private function __construct(){}
 
-    protected function makeConnection() {
+    protected function make_connection() {
         if (!$this->mysqli) $this->mysqli = mysqli_connect('localhost', 'root', '', 'dbpenta');
 
         return $this->mysqli;

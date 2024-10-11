@@ -12,7 +12,7 @@ class CustomerModel extends Connection {
     private $connection;
 
     public function __construct() {
-        $this->connection = $this->makeConnection();
+        $this->connection = $this->make_connection();
     }
 
     // Get all customers
