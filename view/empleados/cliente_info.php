@@ -1,11 +1,18 @@
 <?php
 session_start();
 
-require_once('../../controllers/customer_controller.php');
-require_once('../../controllers/service_controller.php');
-require_once('../../controllers/locker_controller.php');
-require_once('../../models/validators/login_validation.php');
-require_once('../../controllers/vehicle_controller.php');
+use Controllers\CustomerController;
+use Controllers\VehicleController;
+use Controllers\ServiceController;
+use Controllers\LockerController;
+
+spl_autoload_register(function($class){
+    if (file_exists('../../' . str_replace('\\', '/', $class) . '.php')) {
+        require_once('../../' . str_replace('\\', '/', $class) . '.php');
+    } 
+});
+
+require_once('../../Models/validators/login_validation.php');
 
 validateLogin();
 $user = $_SESSION['user'];

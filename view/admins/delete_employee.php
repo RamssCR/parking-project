@@ -1,6 +1,12 @@
 <?php
 //validacion para eliminar un empleado
-require_once('../../controllers/parking_controller.php');
+use Controllers\EmployeeController;
+
+spl_autoload_register(function($class){
+    if (file_exists('../../' . str_replace('\\', '/', $class) . '.php')) {
+        require_once('../../' . str_replace('\\', '/', $class) . '.php');
+    } 
+});
 
 if (isset($_GET['document']) && isset($_GET['email'])) {
     $controller = new EmployeeController();

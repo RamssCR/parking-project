@@ -1,7 +1,14 @@
 <?php
 session_start();
-require_once('../../models/validators/login_validation.php');
-require_once('../../controllers/parking_controller.php');
+use Controllers\EmployeeController;
+
+spl_autoload_register(function($class){
+    if (file_exists('../../' . str_replace('\\', '/', $class) . '.php')) {
+        require_once('../../' . str_replace('\\', '/', $class) . '.php');
+    } 
+});
+
+require_once('../../Models/validators/login_validation.php');
 
 validateLogin();
 $user = $_SESSION['user'];

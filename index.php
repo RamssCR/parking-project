@@ -1,6 +1,13 @@
 <?php
 session_start();
-require_once("controllers/auth_controller.php");
+use Controllers\AuthController;
+
+spl_autoload_register(function($class){
+    if (file_exists(str_replace('\\', '/', $class) . '.php')) {
+        require_once str_replace('\\', '/', $class) . '.php';
+    } 
+});
+
 require_once('models/validators/login_validation.php');
 
 isLogged();

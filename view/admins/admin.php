@@ -1,7 +1,6 @@
 <?php
     session_start();
-    require_once('../../controllers/parking_controller.php');
-    require_once('../../models/validators/login_validation.php');
+    require_once('../../Models/validators/login_validation.php');
 
     validateLogin();
     $user = $_SESSION['user'];
