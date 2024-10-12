@@ -1,0 +1,1 @@
+Carpeta diseñada para subir archivos multimedia a la aplicación web.
