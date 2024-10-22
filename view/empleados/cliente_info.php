@@ -189,13 +189,7 @@ if (isset($_GET['id_cliente'])) {
         ?>
     </div>
 
-    <script>
-        const bgImage = localStorage.getItem('background')
-        if (bgImage) {
-            document.body.style.backgroundImage = `url(../../images/background/${bgImage})`
-            document.querySelectorAll('.changer').forEach(title => bgImage.includes("8") ? title.style.color = "#f6f6f6" : title.style.color = "#222222")
-        }
-    </script>
+    <script src="../../JS/showBgPicture.js"></script>
     <script src="../../JS/displayEdit.js"></script>
     <script src="../../JS/displayLockerForm.js"></script>
 </body>
