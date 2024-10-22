@@ -1,9 +1,23 @@
 <?php
-class LockerModel {
+namespace Models;
+use Abstracts\Connection;
+
+spl_autoload_register(function($class){
+    if (file_exists('../../models/' . str_replace('\\', '/', $class) . '.php')) {
+        require_once '../../models/' . str_replace('\\', '/', $class) . '.php';
+    } 
+});
+
+class LockerModel extends Connection {
     private $connection;
 
     public function __construct() {
-        $this->connection = mysqli_connect('localhost', 'root', '', 'dbpenta');
+        $this->connection = $this->make_connection();
+    }
+
+    // Show all lockers
+    public function showAll_lockers() {
+        return mysqli_execute_query($this->connection, 'SELECT * FROM lockers');
     }
 
     // Show all available lockers

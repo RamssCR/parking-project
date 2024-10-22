@@ -1,7 +1,6 @@
 <?php
     session_start();
-    require_once('../../controllers/parking_controller.php');
-    require_once('../../models/validators/login_validation.php');
+    require_once('../../Models/validators/login_validation.php');
 
     validateLogin();
     $user = $_SESSION['user'];
@@ -75,14 +74,9 @@
         </main>
     </div>
 
+    <script src="../../JS/showBgPicture.js"></script>
     <script>
         const registers = document.querySelector('#inventory-body')
-        const bgImage = localStorage.getItem('background')
-        if (bgImage) {
-            document.body.style.backgroundImage = `url(../../images/background/${bgImage})`
-            document.querySelectorAll('.changer').forEach(title => bgImage.includes("8") ? title.style.color = "#f6f6f6" : title.style.color = "#222222")
-        }
-
         if (registers.childElementCount === 0) {
             registers.insertAdjacentHTML("afterbegin", '<span class="text-center font-semibold w-100 block py-3">No hay empleados</span>');
         }

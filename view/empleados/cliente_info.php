@@ -1,11 +1,18 @@
 <?php
 session_start();
 
-require_once('../../controllers/customer_controller.php');
-require_once('../../controllers/service_controller.php');
-require_once('../../controllers/locker_controller.php');
-require_once('../../models/validators/login_validation.php');
-require_once('../../controllers/vehicle_controller.php');
+use Controllers\CustomerController;
+use Controllers\VehicleController;
+use Controllers\ServiceController;
+use Controllers\LockerController;
+
+spl_autoload_register(function($class){
+    if (file_exists('../../' . str_replace('\\', '/', $class) . '.php')) {
+        require_once('../../' . str_replace('\\', '/', $class) . '.php');
+    } 
+});
+
+require_once('../../Models/validators/login_validation.php');
 
 validateLogin();
 $user = $_SESSION['user'];
@@ -182,13 +189,7 @@ if (isset($_GET['id_cliente'])) {
         ?>
     </div>
 
-    <script>
-        const bgImage = localStorage.getItem('background')
-        if (bgImage) {
-            document.body.style.backgroundImage = `url(../../images/background/${bgImage})`
-            document.querySelectorAll('.changer').forEach(title => bgImage.includes("8") ? title.style.color = "#f6f6f6" : title.style.color = "#222222")
-        }
-    </script>
+    <script src="../../JS/showBgPicture.js"></script>
     <script src="../../JS/displayEdit.js"></script>
     <script src="../../JS/displayLockerForm.js"></script>
 </body>

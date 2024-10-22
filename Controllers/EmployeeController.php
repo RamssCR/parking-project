@@ -1,5 +1,13 @@
 <?php
-require_once('../../models/parking_model.php');
+namespace Controllers;
+use Models\EmployeeModel;
+
+spl_autoload_register(function($class){
+    if (file_exists(str_replace('\\', '/', $class) . '.php')) {
+        require_once str_replace('\\', '/', $class) . '.php';
+    }
+});
+
 require_once('../../models/validators/profile_picture.php');
 
 class EmployeeController {

@@ -1,5 +1,14 @@
 <?php
-class AuthModel {
+namespace Models;
+use Abstracts\Connection;
+
+spl_autoload_register(function($class){
+    if (file_exists('models/' . str_replace('\\', '/', $class) . '.php')) {
+        require_once 'models/' . str_replace('\\', '/', $class) . '.php';
+    } 
+});
+
+class AuthModel extends Connection {
     protected $email;
     protected $password;
     protected $role;
@@ -9,7 +18,7 @@ class AuthModel {
         $this->email = $email;
         $this->password = $password;
         $this->role = $role;
-        $this->connection = mysqli_connect('localhost', 'root', '', 'dbpenta');
+        $this->connection = $this->make_connection();
     }
 
     public function login() : array | bool {

@@ -1,10 +1,18 @@
 <?php
+namespace Models;
+use Abstracts\Connection;
 
-class CustomerModel {
+spl_autoload_register(function($class){
+    if (file_exists('../../models/' . str_replace('\\', '/', $class) . '.php')) {
+        require_once '../../models/' . str_replace('\\', '/', $class) . '.php';
+    } 
+});
+
+class CustomerModel extends Connection {
     private $connection;
 
     public function __construct() {
-        $this->connection = mysqli_connect('localhost', 'root', '', 'dbpenta');
+        $this->connection = $this->make_connection();
     }
 
     // Get all customers

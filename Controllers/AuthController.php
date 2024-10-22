@@ -1,6 +1,14 @@
 <?php
-require('models/auth_model.php');
-require('models/validators/password_validation.php');
+namespace Controllers;
+use Models\AuthModel;
+
+spl_autoload_register(function($class){
+   if (file_exists(str_replace('\\', '/', $class) . '.php')) {
+       require_once str_replace('\\', '/', $class) . '.php';
+   } 
+});
+
+require_once('models/validators/password_validation.php');
 
 class AuthController {
     protected $email;

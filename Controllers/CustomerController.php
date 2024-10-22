@@ -1,5 +1,12 @@
 <?php
-require_once('../../models/customer_model.php');
+namespace Controllers;
+use Models\CustomerModel;
+
+spl_autoload_register(function($class){
+    if (file_exists(str_replace('\\', '/', $class) . '.php')) {
+        require_once str_replace('\\', '/', $class) . '.php';
+    }
+});
 
 class CustomerController {
     private $model;

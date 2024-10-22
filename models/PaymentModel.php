@@ -1,14 +1,26 @@
 <?php
-require_once('../../controllers/service_controller.php');
-require_once('../../controllers/locker_controller.php');
+namespace Models;
+use Controllers\ServiceController;
+use Controllers\LockerController;
+use Abstracts\Connection;
 
-class PaymentModel{
+spl_autoload_register(function($class){
+    if (file_exists('../../models/' . str_replace('\\', '/', $class) . '.php')) {
+        require_once '../../models/' . str_replace('\\', '/', $class) . '.php';
+    } 
+
+    if (file_exists(str_replace('\\', '/', $class) . '.php')) {
+        require_once str_replace('\\', '/', $class) . '.php';
+    }
+});
+
+class PaymentModel extends Connection{
     private $connection;
     private $trigger;
     private $lockerTrigger;
 
     public function __construct() {
-        $this->connection = mysqli_connect('localhost', 'root', '', 'dbpenta');
+        $this->connection = $this->make_connection();
         $this->trigger = new ServiceController();
         $this->lockerTrigger = new LockerController();
     }

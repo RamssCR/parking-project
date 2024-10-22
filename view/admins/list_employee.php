@@ -1,5 +1,11 @@
 <?php
-require_once('../../controllers/parking_controller.php');
+use Controllers\EmployeeController;
+
+spl_autoload_register(function($class){
+    if (file_exists('../../' . str_replace('\\', '/', $class) . '.php')) {
+        require_once('../../' . str_replace('\\', '/', $class) . '.php');
+    } 
+});
 
 $controller = new EmployeeController();
 $employees = $controller->showAll_employees();

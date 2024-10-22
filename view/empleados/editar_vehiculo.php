@@ -1,9 +1,14 @@
 <?php
     session_start();
+    use Controllers\VehicleController;
 
-    require_once('../../controllers/vehicle_controller.php');
-    require_once('../../models/validators/login_validation.php');
-    require_once('../../controllers/parking_controller.php');
+    spl_autoload_register(function($class){
+        if (file_exists('../../' . str_replace('\\', '/', $class) . '.php')) {
+            require_once('../../' . str_replace('\\', '/', $class) . '.php');
+        } 
+    });
+
+    require_once('../../Models/validators/login_validation.php');
     require_once('../../connection.php');
 
     validateLogin();
@@ -83,10 +88,8 @@
         </main>
     </div>
 
+    <script src="../../JS/showBgPicture.js"></script>
     <script>
-        const bgImage = localStorage.getItem('background')
-        if (bgImage) document.body.style.backgroundImage = `url(../../images/background/${bgImage})`
-
         document.addEventListener('DOMContentLoaded',() => {
             const statusMessage = document.getElementById('status-message');
             if (statusMessage && statusMessage.classList.contains('hidden') === false) {

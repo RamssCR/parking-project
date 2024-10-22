@@ -1,11 +1,23 @@
 <?php
-require_once('../../models/locker_model.php');
+namespace Controllers;
+use Models\LockerModel;
+
+spl_autoload_register(function($class){
+    if (file_exists(str_replace('\\', '/', $class) . '.php')) {
+        require_once str_replace('\\', '/', $class) . '.php';
+    }
+});
 
 class LockerController {
     private $model;
 
     public function __construct() {
         $this->model = new LockerModel();
+    }
+
+    // Fetching all lockers
+    public function getAll_lockers() {
+        return $this->model->showAll_lockers();
     }
 
     // Fetching all available lockers
