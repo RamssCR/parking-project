@@ -20,6 +20,7 @@
                     <li><a href="../admins/crear_empleado.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Crear Empleado</a></li>
                     <li><a href="../empleados/empleado.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Lista de Clientes</a></li>
                     <li><a href="../empleados/crear_cliente.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Crear Cliente</a></li>
+                    <li><a href="../empleados/lockers.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Casilleros</a></li>
                     <li><a href="../empleados/profile.php?id_employee=<?= $user['documento'] ?>" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Perfil</a></li>
                     <?php
                 }
@@ -28,6 +29,7 @@
                 if ($user['tipo_usuario'] == 'Empleado') { ?>
                     <li><a href="empleado.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Lista de Clientes</a></li>
                     <li><a href="crear_cliente.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Crear Cliente</a></li>
+                    <li><a href="../empleados/lockers.php" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Casilleros</a></li>
                     <li><a href="profile.php?id_employee=<?= $user['documento'] ?>" class="block py-2 px-4 rounded hover:bg-gray-700 transition duration-200">Perfil</a></li>
                 <?php
                 }
