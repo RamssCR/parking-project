@@ -15,6 +15,11 @@ class LockerModel extends Connection {
         $this->connection = $this->make_connection();
     }
 
+    // Show all lockers
+    public function showAll_lockers() {
+        return mysqli_execute_query($this->connection, 'SELECT * FROM lockers');
+    }
+
     // Show all available lockers
     public function showAll_available_lockers() {
         return mysqli_execute_query($this->connection, 'SELECT * FROM lockers WHERE asignado = ?', [0]);
