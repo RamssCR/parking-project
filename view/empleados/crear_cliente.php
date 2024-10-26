@@ -92,15 +92,8 @@
         </main>
     </div>
 
-<<<<<<< HEAD
-    <script>
-        const bgImage = localStorage.getItem('background')
-        if (bgImage) document.body.style.backgroundImage = `url(../../images/background/${bgImage})`
-        
-=======
     <script src="../../JS/showBgPicture.js"></script>
     <script>
->>>>>>> 0eab66cb21ac0e98a4411fdaaf548a012affe0a7
         document.addEventListener('DOMContentLoaded',() => {
             const statusMessage = document.getElementById('status-message');
             if (statusMessage && statusMessage.classList.contains('hidden') === false) {

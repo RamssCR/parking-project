@@ -73,18 +73,8 @@
         </main>
     </div>
 
-<<<<<<< HEAD
-    <script>
-        const bgImage = localStorage.getItem('background')
-        if (bgImage) {
-            document.body.style.backgroundImage = `url(../../images/background/${bgImage})`
-            document.querySelectorAll('.changer').forEach(title => bgImage.includes("8") ? title.style.color = "#f6f6f6" : title.style.color = "#222222")
-        }
-    
-=======
     <script src="../../JS/showBgPicture.js"></script>
     <script>    
->>>>>>> 0eab66cb21ac0e98a4411fdaaf548a012affe0a7
         const registers = document.querySelector('#inventory-body')
 
         if (registers.childElementCount === 0) {

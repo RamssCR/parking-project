@@ -74,20 +74,9 @@
         </main>
     </div>
 
-<<<<<<< HEAD
-    <script>
-        const registers = document.querySelector('#inventory-body')
-        const bgImage = localStorage.getItem('background')
-        if (bgImage) {
-            document.body.style.backgroundImage = `url(../../images/background/${bgImage})`
-            document.querySelectorAll('.changer').forEach(title => bgImage.includes("8") ? title.style.color = "#f6f6f6" : title.style.color = "#222222")
-        }
-
-=======
     <script src="../../JS/showBgPicture.js"></script>
     <script>
         const registers = document.querySelector('#inventory-body')
->>>>>>> 0eab66cb21ac0e98a4411fdaaf548a012affe0a7
         if (registers.childElementCount === 0) {
             registers.insertAdjacentHTML("afterbegin", '<span class="text-center font-semibold w-100 block py-3">No hay empleados</span>');
         }

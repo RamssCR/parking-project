@@ -15,14 +15,11 @@ class LockerController {
         $this->model = new LockerModel();
     }
 
-<<<<<<< HEAD
-=======
     // Fetching all lockers
     public function getAll_lockers() {
         return $this->model->showAll_lockers();
     }
 
->>>>>>> 0eab66cb21ac0e98a4411fdaaf548a012affe0a7
     // Fetching all available lockers
     public function getAll_available_lockers() {
         return $this->model->showAll_available_lockers();
