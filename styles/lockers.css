@@ -1,0 +1,125 @@
+:root {
+    --customer-container-bg: #F9FAFB;
+    --border-color: #E5E7EB;
+    --underline-color: #D1D5DB;
+    --card-bg: #1E40AF;
+    --text-color: #374151;
+    --btn-new-bgColor: #1F2937;
+    --card-free: #999999;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.customer-container {
+    background-color: var(--customer-container-bg);
+    width: 100%;
+    min-height: 18em;
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 2em 0;
+    margin-bottom: 2em;
+}
+
+.customer-container h2 {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.8em;
+}
+
+.customer-container .locker-info-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border-bottom: 1px solid var(--underline-color);
+    padding: 1em;
+    gap: 1em;
+    margin: 0 auto;
+    width: 95%;
+}
+
+.customer-container .locker-info-container .locker{
+    width: 7em;
+    height: 7em;
+    color: var(--customer-container-bg);
+    padding: 0.5em;
+}
+
+.free{
+    background-color: var(--card-free);
+}
+
+.taken{
+    background-color: var(--card-bg);
+}
+
+.leyends-container{
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    border-radius: 0.5em;
+    padding: 0.8em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.leyends-container .groups{
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+}
+
+.leyends-container .groups .leyend-color{
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.leyends-container .groups .leyend-item{
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+@media only screen and (width <= 1200px) {
+    .customer-container .locker-info-container{
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+@media only screen and (width <= 1015px) {
+    .customer-container .locker-info-container{
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media only screen and (width <= 875px) {
+    .customer-container .locker-info-container{
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .leyends-container{
+        top: -6em;
+        background-color: #00000099;
+        color: var(--customer-container-bg);
+    }
+
+    .leyends-container .groups .leyend-color{
+        border: 2px solid var(--customer-container-bg);
+    }
+}

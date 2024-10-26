@@ -122,6 +122,7 @@ if (isset($_GET['placa'])) {
             </article>
         </div>
     </div>
+<<<<<<< HEAD
     <script>
         const bgImage = localStorage.getItem('background')
         if (bgImage) {
@@ -129,6 +130,10 @@ if (isset($_GET['placa'])) {
             document.querySelectorAll('.changer').forEach(title => bgImage.includes("8") ? title.style.color = "#f6f6f6" : title.style.color = "#222222")
         }
     </script>
+=======
+    
+    <script src="../../JS/showBgPicture.js"></script>
+>>>>>>> 0eab66cb21ac0e98a4411fdaaf548a012affe0a7
     <script src="../../JS/currencyFormat.js"></script>
     <script src="../../JS/timeCounter.js"></script>
 </body>
