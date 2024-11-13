@@ -18,9 +18,9 @@ class ServiceController {
     // Fetch all customer services
     public function showAll_customer_services($id_customer) {
         $services = $this->model->getAll_customer_services($id_customer);
-        if ($services == 0) return 'Ninguno';
+        if ($services == 0) return 'Sin servicio';
 
-        return $services;
+        return 'Activo';
     }
 
     // Insert and/or Enable customer services
