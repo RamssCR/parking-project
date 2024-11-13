@@ -10,6 +10,7 @@ spl_autoload_register(function($class){
 });
 
 require_once('../../Models/validators/login_validation.php');
+require_once('../../utils/createReport.php');
 validateLogin();
 
 $user = $_SESSION['user'];
@@ -42,6 +43,10 @@ if (isset($_GET['placa'])) {
 
         $insert_payment = $payment_request->create_payment($request_payment);
         if ($insert_payment) header('location: info_vehiculo.php?placa='.$placa);
+    }
+
+    if (isset($_POST['generate'])) {
+        generateReport($paymentInfo);
     }
 }
 ?>
@@ -89,6 +94,7 @@ if (isset($_GET['placa'])) {
                 <form method="post" class="btns-payment-actions">
                     <button class="play">Iniciar Contador</button>
                     <button class="stop" name="calculate">Calcular Pago</button>
+                    <button class="stop" name="generate">Generar Reporte</button>
                     <input class="time" type="text" value="00:00:00" disabled>
                     <input class="time2" type="hidden" name="time">
                 </form>
