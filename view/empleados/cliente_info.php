@@ -93,7 +93,7 @@ if (isset($_GET['id_cliente'])) {
                         <span class="info-data"><?= $countedCars > 0 ? $countedCars : 'Ninguno' ?></span>
                     </div>
                     <div class="info-card">
-                        <span class="info-title font-semibold">Servicios Activos</span>
+                        <span class="info-title font-semibold">Servicio de Autolavado</span>
                         <span class="info-data"><?= $countedServices ?></span>
                     </div>
                     <div class="info-card">
@@ -107,7 +107,7 @@ if (isset($_GET['id_cliente'])) {
                 <div class="btns-create">
                     <a href="crear_vehiculo.php?id_customer=<?= $showCustomer['id_cliente'] ?>"><span class="add">+</span></a>
                     <?php
-                        if ($countedServices == 2) { ?>
+                        if ($countedServices == 'Activo') { ?>
                             <button class="activate_modal"><span class="add">+</span></button>
                             <?php
                         }
@@ -156,7 +156,7 @@ if (isset($_GET['id_cliente'])) {
             </section>
         </main>
         <?php
-            if ($countedServices == 2) { ?>
+            if ($countedServices == 'Activo') { ?>
                 <section class="modal">
                     <span class="quit">X</span>
                     <form method="post" class="locker-form">
